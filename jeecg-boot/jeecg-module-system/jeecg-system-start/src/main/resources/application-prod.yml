@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9999
   tomcat:
     max-swallow-size: -1
   error:
@@ -142,9 +142,11 @@ spring:
           slow-sql-millis: 5000
       datasource:
         master:
-          url: jdbc:mysql://127.0.0.1:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
           username: root
-          password: root
+          #url: jdbc:mysql://127.0.0.1:3316/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          #password: root
+          url: jdbc:mysql://127.0.0.1:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          password: skrh@2025
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:
@@ -158,7 +160,7 @@ spring:
       database: 0
       host: 127.0.0.1
       port: 6379
-      password:
+      password: b840b7be6c52
 #mybatis plus 设置
 mybatis-plus:
   mapper-locations: classpath*:org/jeecg/**/xml/*Mapper.xml
@@ -205,8 +207,8 @@ jeecg:
   signatureSecret: dd05f1c54d63749eda95f9fa6d49v442a
   #签名拦截接口
   signUrls: /sys/dict/getDictItems/*,/sys/dict/loadDict/*,/sys/dict/loadDictOrderByValue/*,/sys/dict/loadDictItem/*,/sys/dict/loadTreeData,/sys/api/queryTableDictItemsByCode,/sys/api/queryFilterTableDictInfo,/sys/api/queryTableDictByKeys,/sys/api/translateDictFromTable,/sys/api/translateDictFromTableByKeys,/sys/sendChangePwdSms,/sys/user/sendChangePhoneSms,/sys/sms,/desform/api/sendVerifyCode
-  # local\minio\alioss
-  uploadType: alioss
+  # local\minio\alioss 三选一
+  uploadType: local
   # 前端访问地址
   domainUrl:
     pc: http://localhost:3100

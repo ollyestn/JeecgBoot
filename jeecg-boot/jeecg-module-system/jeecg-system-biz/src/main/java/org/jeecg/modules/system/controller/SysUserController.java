@@ -924,16 +924,16 @@ public class SysUserController {
                 return result;
             }
         }
-        if(null == code){
-            result.setMessage("手机验证码失效，请重新获取");
-            result.setSuccess(false);
-            return result;
-        }
-		if (!smscode.equals(code.toString())) {
-			result.setMessage("手机验证码错误");
-			result.setSuccess(false);
-			return result;
-		}
+//        if(null == code){
+//            result.setMessage("手机验证码失效，请重新获取");
+//            result.setSuccess(false);
+//            return result;
+//        }
+//		if (!smscode.equals(code.toString())) {
+//			result.setMessage("手机验证码错误");
+//			result.setSuccess(false);
+//			return result;
+//		}
 
         String realname = jsonObject.getString("realname");
         if(oConvertUtils.isEmpty(realname)){

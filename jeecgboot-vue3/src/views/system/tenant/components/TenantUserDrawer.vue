@@ -70,7 +70,7 @@
         if (!data.username) {
           data.username = data.phone;
         }
-        data.password = '123456';
+        data.password = '';
         confirmLoading.value = true;
         await saveOrUpdateTenantUser(data, isUpdate.value);
         confirmLoading.value = false;

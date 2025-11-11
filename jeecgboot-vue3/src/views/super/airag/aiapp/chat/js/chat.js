@@ -96,9 +96,9 @@
         `;
 
     iframe.id = 'ai-app-chat-document';
-    //update-begin---author:wangshuai---date:2025-04-25---for:【QQYUN-12159】【AI 广告位】让需要自建AI知识库的用户知道如何通过敲敲云搭建自己的AI知识库---
+    //update-begin---author:wangshuai---date:2025-04-25---for:【QQYUN-12159】【AI 广告位】让需要自建AI知识库的用户知道如何通过某云搭建自己的AI知识库---
     iframe.src = getIframeSrc(finalConfig) + '/ai/app/chat/' + finalConfig.appId + "?source=chatJs";
-    //update-end---author:wangshuai---date:2025-04-25---for:【QQYUN-12159】【AI 广告位】让需要自建AI知识库的用户知道如何通过敲敲云搭建自己的AI知识库---
+    //update-end---author:wangshuai---date:2025-04-25---for:【QQYUN-12159】【AI 广告位】让需要自建AI知识库的用户知道如何通过某云搭建自己的AI知识库---
     let iconRight = finalConfig.chatWidth === '100%'?'0':'-6px';
     let iconTop = finalConfig.chatWidth === '100%'?'0':'-9px';
     if(isMobileDevice()){

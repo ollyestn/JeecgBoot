@@ -195,12 +195,12 @@
   const formData = reactive<any>({
     inputCode: '',
     username: 'admin',
-    password: '123456',
+    password: '',
   });
   //手机登录表单字段
   const phoneFormData = reactive<any>({
     mobile: '',
-    smscode: '',
+    smscode: '123456',
   });
   const loginRef = ref();
   //第三方登录弹窗

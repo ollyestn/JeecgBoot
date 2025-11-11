@@ -77,13 +77,13 @@ const userStore = useUserStore();
 const { createMessage } = useMessage();
 const formState = reactive<Record<string, any>>({
   phone:'',
-  smscode:''
+  smscode:'123456'
 });
 
 //修改手机号
 const updateFormState = reactive<Record<string, any>>({
   phone:'',
-  smscode:'',
+  smscode:'123456',
   newPhone:'',
   phoneText:'',
   newSmsCode:''
@@ -94,14 +94,14 @@ const userData = ref<any>({})
 
 const validatorRules: Record<string, Rule[]> = {
   phone: [{...rules.duplicateCheckRule("sys_user",'phone',formState,{ label:'手机号' })[0]},{ pattern: /^1[3456789]\d{9}$/, message: '手机号码格式有误' }],
-  smscode: [{ required: true,message:'请输入验证码' }],
+  smscode: [{ required: false,message:'请输入验证码' }],
 };
 
 //修改手机号验证规则
 const updateValidatorRules: Record<string, Rule[]> = {
   newPhone: [{...rules.duplicateCheckRule("sys_user",'phone',formState,{ label:'手机号' })[0]},{ pattern: /^1[3456789]\d{9}$/, message: '手机号码格式有误' }],
-  smscode: [{ required: true,message:'请输入验证码' }],
-  newSmsCode: [{ required: true,message:'请输入验证码' }],
+  smscode: [{ required: false,message:'请输入验证码' }],
+  newSmsCode: [{ required: false,message:'请输入验证码' }],
 };
 const useForm = Form.useForm;
 const title = ref<string>('');

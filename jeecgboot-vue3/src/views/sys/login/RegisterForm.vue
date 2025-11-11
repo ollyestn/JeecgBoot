@@ -12,7 +12,7 @@
         <CountdownInput
           size="large"
           class="fix-auto-fill"
-          v-model:value="formData.sms"
+          v-model:value="formData.sms111"
           :placeholder="t('sys.login.smsCode')"
           :sendCodeApi="sendCodeApi"
         />
@@ -61,8 +61,8 @@
     account: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
-    sms: '',
+    mobile: '111',
+    sms: '123456',
     policy: false,
   });
   const { getFormRules } = useFormRules(formData);
@@ -72,6 +72,7 @@
    * 注册
    */
   async function handleRegister() {
+    debugger;
     const data = await validForm();
     if (!data) return;
     try {

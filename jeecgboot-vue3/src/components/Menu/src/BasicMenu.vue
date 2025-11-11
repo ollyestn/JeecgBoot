@@ -152,10 +152,10 @@
                 _key = key;
               }
               
-              // update-begin--author:liaozhiyang---date:20250825---for:【QQYUN-13593】敲敲云首页菜单外部打开
+              // update-begin--author:liaozhiyang---date:20250825---for:【QQYUN-13593】某云首页菜单外部打开
               // =====================================================================
               // TODO: 临时代码 - 需要删除！！！
-              // 这是针对敲敲云首页菜单的特殊处理，后续需要重构或删除
+              // 这是针对某云首页菜单的特殊处理，后续需要重构或删除
               // =====================================================================
               // 是外部打开且是白名单内的菜单，则直接打开
               if (subMenuItem?.internalOrExternal == true && ['/myapps/index'].includes(path)) {
@@ -163,7 +163,7 @@
                 return;
               }
               // =====================================================================
-              // update-end--author:liaozhiyang---date:20250825---for:【QQYUN-13593】敲敲云首页菜单外部打开
+              // update-end--author:liaozhiyang---date:20250825---for:【QQYUN-13593】某云首页菜单外部打开
               
               emit('menuClick', _key, { title: subMenuItem.title });
             } else {

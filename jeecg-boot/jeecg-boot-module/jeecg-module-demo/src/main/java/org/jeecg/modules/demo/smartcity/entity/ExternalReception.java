@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 对外接待
  * @Author: jeecg-boot
- * @Date:   2025-11-04
+ * @Date:   2025-11-12
  * @Version: V1.0
  */
 @Data
@@ -38,9 +38,9 @@ public class ExternalReception implements Serializable {
     @Schema(description = "主键")
     private java.lang.String id;
 	/**来访日期*/
-	@Excel(name = "来访日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@Excel(name = "来访日期", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Schema(description = "来访日期")
     private java.util.Date visitDate;
 	/**来访单位全称*/

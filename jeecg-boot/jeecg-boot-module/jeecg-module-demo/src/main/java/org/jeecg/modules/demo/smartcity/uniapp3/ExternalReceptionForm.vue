@@ -14,14 +14,13 @@ navigationBarTitleText: '对外接待',
         <wd-form ref="form" :model="myFormData">
           <wd-cell-group border>
           <view class="{ 'mt-14px': 0 == 0 }">
-              <DateTime
+              <online-date
                   :label="get4Label('来访日期')"
                   labelWidth="100px"
-                  type="datetime"
-                  format="YYYY-MM-DD HH:mm:ss"
+                  type="date"
                   name='visitDate'
-                  v-model="myFormData['visitDate']"
-              ></DateTime>
+                  v-model:value="myFormData['visitDate']"
+              ></online-date>
         </view>
           <view class="{ 'mt-14px': 1 == 0 }">
               <wd-input

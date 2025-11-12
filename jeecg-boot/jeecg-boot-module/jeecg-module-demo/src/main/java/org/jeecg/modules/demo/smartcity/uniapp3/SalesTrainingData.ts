@@ -2,9 +2,9 @@ import { render } from '@/common/renderUtils';
 //列表数据
 export const columns = [
     {
-    title: '时间',
+    title: '日期',
     align:"center",
-    dataIndex: 'trainingTime'
+    dataIndex: 'trainingTime',
    },
    {
     title: '课题',

@@ -6,9 +6,13 @@ import { getWeekMonthQuarterYear } from '/@/utils';
 //列表数据
 export const columns: BasicColumn[] = [
    {
-    title: '时间',
+    title: '日期',
     align:"center",
-    dataIndex: 'trainingTime'
+    dataIndex: 'trainingTime',
+    customRender:({text}) =>{
+      text = !text ? "" : (text.length > 10 ? text.substr(0,10) : text);
+      return text;
+    },
    },
    {
     title: '课题',
@@ -39,13 +43,12 @@ export const columns: BasicColumn[] = [
 //查询数据
 export const searchFormSchema: FormSchema[] = [
 	{
-      label: "时间",
+      label: "日期",
       field: 'trainingTime',
       component: 'DatePicker',
       componentProps: {
-         showTime:true,
-         valueFormat: 'YYYY-MM-DD HH:mm:ss'
-       },
+        valueFormat: 'YYYY-MM-DD'
+      },
       //colProps: {span: 6},
  	},
 	{
@@ -82,13 +85,12 @@ export const searchFormSchema: FormSchema[] = [
 //表单数据
 export const formSchema: FormSchema[] = [
   {
-    label: '时间',
+    label: '日期',
     field: 'trainingTime',
     component: 'DatePicker',
     componentProps: {
-       showTime: true,
-       valueFormat: 'YYYY-MM-DD HH:mm:ss'
-     },
+      valueFormat: 'YYYY-MM-DD'
+    },
   },
   {
     label: '课题',
@@ -126,7 +128,7 @@ export const formSchema: FormSchema[] = [
 
 // 高级查询数据
 export const superQuerySchema = {
-  trainingTime: {title: '时间',order: 0,view: 'datetime', type: 'string',},
+  trainingTime: {title: '日期',order: 0,view: 'date', type: 'string',},
   trainingTopic: {title: '课题',order: 1,view: 'text', type: 'string',},
   mainContent: {title: '主要内容',order: 2,view: 'text', type: 'string',},
   traingType: {title: '组织形式',order: 3,view: 'text', type: 'string',},

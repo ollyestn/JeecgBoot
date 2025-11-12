@@ -14,14 +14,13 @@ navigationBarTitleText: '培训统计',
         <wd-form ref="form" :model="myFormData">
           <wd-cell-group border>
           <view class="{ 'mt-14px': 0 == 0 }">
-              <DateTime
-                  :label="get4Label('时间')"
+              <online-date
+                  :label="get4Label('日期')"
                   labelWidth="100px"
-                  type="datetime"
-                  format="YYYY-MM-DD HH:mm:ss"
+                  type="date"
                   name='trainingTime'
-                  v-model="myFormData['trainingTime']"
-              ></DateTime>
+                  v-model:value="myFormData['trainingTime']"
+              ></online-date>
         </view>
           <view class="{ 'mt-14px': 1 == 0 }">
               <wd-input

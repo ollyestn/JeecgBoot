@@ -26,8 +26,8 @@
                   <input  placeholder="请输入项目分类" v-model="model.projectCategory"/>
                 </view>
               </view>
-              <my-date label="投标时间：" v-model="model.biddingDate" placeholder="请输入投标时间"></my-date>
-              <my-date label="开标时间：" v-model="model.bidOpeningDate" placeholder="请输入开标时间"></my-date>
+              <my-date label="投标时间：" fields="day" v-model="model.biddingDate" placeholder="请输入投标时间"></my-date>
+              <my-date label="开标时间：" fields="day" v-model="model.bidOpeningDate" placeholder="请输入开标时间"></my-date>
               <view class="cu-form-group">
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">客户信息：</text></view>

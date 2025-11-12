@@ -8,7 +8,7 @@
 		 <!--表单区域-->
 		<view>
 			<form>
-              <my-date label="时间：" v-model="model.trainingTime" placeholder="请输入时间"></my-date>
+              <my-date label="日期：" fields="day" v-model="model.trainingTime" placeholder="请输入日期"></my-date>
               <view class="cu-form-group">
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">课题：</text></view>

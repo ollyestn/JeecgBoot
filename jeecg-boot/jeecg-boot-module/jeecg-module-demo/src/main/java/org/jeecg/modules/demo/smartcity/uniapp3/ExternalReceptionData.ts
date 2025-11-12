@@ -4,7 +4,7 @@ export const columns = [
     {
     title: '来访日期',
     align:"center",
-    dataIndex: 'visitDate'
+    dataIndex: 'visitDate',
    },
    {
     title: '来访单位全称',

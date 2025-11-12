@@ -23,12 +23,20 @@ export const columns: BasicColumn[] = [
    {
     title: '投标时间',
     align:"center",
-    dataIndex: 'biddingDate'
+    dataIndex: 'biddingDate',
+    customRender:({text}) =>{
+      text = !text ? "" : (text.length > 10 ? text.substr(0,10) : text);
+      return text;
+    },
    },
    {
     title: '开标时间',
     align:"center",
-    dataIndex: 'bidOpeningDate'
+    dataIndex: 'bidOpeningDate',
+    customRender:({text}) =>{
+      text = !text ? "" : (text.length > 10 ? text.substr(0,10) : text);
+      return text;
+    },
    },
    {
     title: '客户信息',
@@ -96,9 +104,8 @@ export const searchFormSchema: FormSchema[] = [
       field: 'biddingDate',
       component: 'DatePicker',
       componentProps: {
-         showTime:true,
-         valueFormat: 'YYYY-MM-DD HH:mm:ss'
-       },
+        valueFormat: 'YYYY-MM-DD'
+      },
       //colProps: {span: 6},
  	},
 	{
@@ -148,18 +155,16 @@ export const formSchema: FormSchema[] = [
     field: 'biddingDate',
     component: 'DatePicker',
     componentProps: {
-       showTime: true,
-       valueFormat: 'YYYY-MM-DD HH:mm:ss'
-     },
+      valueFormat: 'YYYY-MM-DD'
+    },
   },
   {
     label: '开标时间',
     field: 'bidOpeningDate',
     component: 'DatePicker',
     componentProps: {
-       showTime: true,
-       valueFormat: 'YYYY-MM-DD HH:mm:ss'
-     },
+      valueFormat: 'YYYY-MM-DD'
+    },
   },
   {
     label: '客户信息',
@@ -215,8 +220,8 @@ export const superQuerySchema = {
   projectName: {title: '项目名称',order: 0,view: 'text', type: 'string',},
   projectType: {title: '项目类型',order: 1,view: 'text', type: 'string',},
   projectCategory: {title: '项目分类',order: 2,view: 'text', type: 'string',},
-  biddingDate: {title: '投标时间',order: 3,view: 'datetime', type: 'string',},
-  bidOpeningDate: {title: '开标时间',order: 4,view: 'datetime', type: 'string',},
+  biddingDate: {title: '投标时间',order: 3,view: 'date', type: 'string',},
+  bidOpeningDate: {title: '开标时间',order: 4,view: 'date', type: 'string',},
   customerInfo: {title: '客户信息',order: 5,view: 'text', type: 'string',},
   competitorInfo: {title: '竞争对手信息',order: 6,view: 'text', type: 'string',},
   quotation: {title: '报价',order: 7,view: 'number', type: 'number',},

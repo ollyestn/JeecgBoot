@@ -53,24 +53,22 @@ navigationBarTitleText: '投标统计',
               />
         </view>
           <view class="{ 'mt-14px': 1 == 0 }">
-              <DateTime
+              <online-date
                   :label="get4Label('投标时间')"
                   labelWidth="100px"
-                  type="datetime"
-                  format="YYYY-MM-DD HH:mm:ss"
+                  type="date"
                   name='biddingDate'
-                  v-model="myFormData['biddingDate']"
-              ></DateTime>
+                  v-model:value="myFormData['biddingDate']"
+              ></online-date>
         </view>
           <view class="{ 'mt-14px': 0 == 0 }">
-              <DateTime
+              <online-date
                   :label="get4Label('开标时间')"
                   labelWidth="100px"
-                  type="datetime"
-                  format="YYYY-MM-DD HH:mm:ss"
+                  type="date"
                   name='bidOpeningDate'
-                  v-model="myFormData['bidOpeningDate']"
-              ></DateTime>
+                  v-model:value="myFormData['bidOpeningDate']"
+              ></online-date>
         </view>
           <view class="{ 'mt-14px': 1 == 0 }">
               <wd-input

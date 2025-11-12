@@ -41,7 +41,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 对外接待
  * @Author: jeecg-boot
- * @Date:   2025-11-04
+ * @Date:   2025-11-12
  * @Version: V1.0
  */
 @Tag(name="对外接待")

@@ -8,7 +8,11 @@ export const columns: BasicColumn[] = [
    {
     title: '来访日期',
     align:"center",
-    dataIndex: 'visitDate'
+    dataIndex: 'visitDate',
+    customRender:({text}) =>{
+      text = !text ? "" : (text.length > 10 ? text.substr(0,10) : text);
+      return text;
+    },
    },
    {
     title: '来访单位全称',
@@ -48,9 +52,8 @@ export const searchFormSchema: FormSchema[] = [
       field: 'visitDate',
       component: 'DatePicker',
       componentProps: {
-         showTime:true,
-         valueFormat: 'YYYY-MM-DD HH:mm:ss'
-       },
+        valueFormat: 'YYYY-MM-DD'
+      },
       //colProps: {span: 6},
  	},
 	{
@@ -85,9 +88,8 @@ export const formSchema: FormSchema[] = [
     field: 'visitDate',
     component: 'DatePicker',
     componentProps: {
-       showTime: true,
-       valueFormat: 'YYYY-MM-DD HH:mm:ss'
-     },
+      valueFormat: 'YYYY-MM-DD'
+    },
   },
   {
     label: '来访单位全称',
@@ -130,7 +132,7 @@ export const formSchema: FormSchema[] = [
 
 // 高级查询数据
 export const superQuerySchema = {
-  visitDate: {title: '来访日期',order: 0,view: 'datetime', type: 'string',},
+  visitDate: {title: '来访日期',order: 0,view: 'date', type: 'string',},
   visitOrgName: {title: '来访单位全称',order: 1,view: 'text', type: 'string',},
   leadersAndPositions: {title: '来访主要领导及职务',order: 2,view: 'text', type: 'string',},
   ourLeadersAndPositions: {title: '我司参加接待领导及职务',order: 3,view: 'text', type: 'string',},

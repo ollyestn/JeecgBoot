@@ -8,7 +8,7 @@
 		 <!--表单区域-->
 		<view>
 			<form>
-              <my-date label="来访日期：" v-model="model.visitDate" placeholder="请输入来访日期"></my-date>
+              <my-date label="来访日期：" fields="day" v-model="model.visitDate" placeholder="请输入来访日期"></my-date>
               <view class="cu-form-group">
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">来访单位全称：</text></view>

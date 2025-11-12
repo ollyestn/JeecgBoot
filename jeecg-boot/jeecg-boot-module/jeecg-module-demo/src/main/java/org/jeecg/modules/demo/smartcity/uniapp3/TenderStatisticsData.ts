@@ -19,12 +19,12 @@ export const columns = [
    {
     title: '投标时间',
     align:"center",
-    dataIndex: 'biddingDate'
+    dataIndex: 'biddingDate',
    },
    {
     title: '开标时间',
     align:"center",
-    dataIndex: 'bidOpeningDate'
+    dataIndex: 'bidOpeningDate',
    },
    {
     title: '客户信息',

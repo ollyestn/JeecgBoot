@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 投标统计
  * @Author: jeecg-boot
- * @Date:   2025-11-04
+ * @Date:   2025-11-12
  * @Version: V1.0
  */
 @Data
@@ -50,15 +50,15 @@ public class TenderStatistics implements Serializable {
     @Schema(description = "项目分类")
     private java.lang.String projectCategory;
 	/**投标时间*/
-	@Excel(name = "投标时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@Excel(name = "投标时间", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Schema(description = "投标时间")
     private java.util.Date biddingDate;
 	/**开标时间*/
-	@Excel(name = "开标时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@Excel(name = "开标时间", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Schema(description = "开标时间")
     private java.util.Date bidOpeningDate;
 	/**客户信息*/

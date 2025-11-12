@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 培训统计
  * @Author: jeecg-boot
- * @Date:   2025-11-04
+ * @Date:   2025-11-12
  * @Version: V1.0
  */
 @Data
@@ -37,11 +37,11 @@ public class SalesTraining implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "主键")
     private java.lang.String id;
-	/**时间*/
-	@Excel(name = "时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "时间")
+	/**日期*/
+	@Excel(name = "日期", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Schema(description = "日期")
     private java.util.Date trainingTime;
 	/**课题*/
 	@Excel(name = "课题", width = 15)

@@ -39,6 +39,12 @@
                   <input  placeholder="请输入参加人员" v-model="model.participants"/>
                 </view>
               </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
+                  <view class="title"><text space="ensp">培训教案：</text></view>
+                  <input  placeholder="请输入培训教案" v-model="model.file"/>
+                </view>
+              </view>
 				<view class="padding">
 					<button class="cu-btn block bg-blue margin-tb-sm lg" @click="onSubmit">
 						<text v-if="loading" class="cuIcon-loading2 cuIconfont-spin"></text>提交

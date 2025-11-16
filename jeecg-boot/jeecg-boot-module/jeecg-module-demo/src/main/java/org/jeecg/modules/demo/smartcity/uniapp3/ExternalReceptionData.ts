@@ -36,4 +36,21 @@ export const columns = [
     align:"center",
     dataIndex: 'note'
    },
+   {
+    title: '接待照片1',
+    align:"center",
+    dataIndex: 'img1',
+    customRender:render.renderImage,
+   },
+   {
+    title: '接待照片2',
+    align:"center",
+    dataIndex: 'img2',
+    customRender:render.renderImage,
+   },
+   {
+    title: '接待照片3',
+    align:"center",
+    dataIndex: 'img3',
+   },
 ];

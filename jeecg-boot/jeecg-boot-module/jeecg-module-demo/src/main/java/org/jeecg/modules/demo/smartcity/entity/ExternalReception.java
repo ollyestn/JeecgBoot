@@ -20,16 +20,16 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * @Description: 对外接待
+ * @Description: 客户接待统计
  * @Author: jeecg-boot
- * @Date:   2025-11-12
+ * @Date:   2025-11-15
  * @Version: V1.0
  */
 @Data
 @TableName("external_reception")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@Schema(description="对外接待")
+@Schema(description="客户接待统计")
 public class ExternalReception implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +67,18 @@ public class ExternalReception implements Serializable {
 	@Excel(name = "备注", width = 15)
     @Schema(description = "备注")
     private java.lang.String note;
+	/**接待照片1*/
+	@Excel(name = "接待照片1", width = 15)
+    @Schema(description = "接待照片1")
+    private java.lang.String img1;
+	/**接待照片2*/
+	@Excel(name = "接待照片2", width = 15)
+    @Schema(description = "接待照片2")
+    private java.lang.String img2;
+	/**接待照片3*/
+	@Excel(name = "接待照片3", width = 15)
+    @Schema(description = "接待照片3")
+    private java.lang.String img3;
 	/**所属部门*/
     @Schema(description = "所属部门")
     private java.lang.String sysOrgCode;

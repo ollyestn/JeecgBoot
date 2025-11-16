@@ -3,7 +3,7 @@
 	   <!--标题和返回-->
 		<cu-custom :bgColor="NavBarColor" isBack>
 			<block slot="backText">返回</block>
-			<block slot="content">对外接待</block>
+			<block slot="content">客户接待统计</block>
 		</cu-custom>
 		<!--滚动加载列表-->
 		<mescroll-body ref="mescrollRef" bottom="88"  @init="mescrollInit" :up="upOption" :down="downOption" @down="downCallback" @up="upCallback">
@@ -25,7 +25,7 @@
 	import Mixin from "@/common/mixin/Mixin.js";
 
 	export default {
-		name: '对外接待',
+		name: '客户接待统计',
 		mixins: [MescrollMixin,Mixin],
 		data() {
 			return {

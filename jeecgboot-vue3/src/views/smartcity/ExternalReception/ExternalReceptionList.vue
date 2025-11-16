@@ -30,6 +30,11 @@
       </template>
       <!--字段回显插槽-->
       <template v-slot:bodyCell="{ column, record, index, text }">
+        <template v-if="column.dataIndex==='img3'">
+          <!--文件字段回显插槽-->
+          <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
+          <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)">下载</a-button>
+        </template>
       </template>
     </BasicTable>
     <!-- 表单区域 -->
@@ -61,7 +66,7 @@
   //注册table数据
   const { prefixCls,tableContext,onExportXls,onImportXls } = useListPage({
       tableProps:{
-           title: '对外接待',
+           title: '客户接待统计',
            api: list,
            columns,
            canResize:true,
@@ -91,7 +96,7 @@
             },
       },
        exportConfig: {
-            name:"对外接待",
+            name:"客户接待统计",
             url: getExportUrl,
             params: queryParam,
           },

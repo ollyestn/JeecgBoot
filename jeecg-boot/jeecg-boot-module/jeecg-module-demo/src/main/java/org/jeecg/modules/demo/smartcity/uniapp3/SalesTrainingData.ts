@@ -31,4 +31,9 @@ export const columns = [
     align:"center",
     dataIndex: 'participants'
    },
+   {
+    title: '培训教案',
+    align:"center",
+    dataIndex: 'file',
+   },
 ];

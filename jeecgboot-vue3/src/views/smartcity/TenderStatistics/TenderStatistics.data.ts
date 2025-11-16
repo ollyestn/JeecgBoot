@@ -78,6 +78,11 @@ export const columns: BasicColumn[] = [
     align:"center",
     dataIndex: 'reasonNotWinning'
    },
+   {
+    title: '投标复盘反馈',
+    align:"center",
+    dataIndex: 'files',
+   },
 ];
 //查询数据
 export const searchFormSchema: FormSchema[] = [
@@ -206,6 +211,13 @@ export const formSchema: FormSchema[] = [
     field: 'reasonNotWinning',
     component: 'Input',
   },
+  {
+    label: '投标复盘反馈',
+    field: 'files',
+    component: 'JUpload',
+    componentProps:{
+     },
+  },
 	// TODO 主键隐藏字段，目前写死为ID
 	{
 	  label: '',
@@ -230,6 +242,7 @@ export const superQuerySchema = {
   biddingSituation: {title: '中标情况',order: 10,view: 'text', type: 'string',},
   winBidAmount: {title: '中标金额',order: 11,view: 'text', type: 'string',},
   reasonNotWinning: {title: '未中标原因',order: 12,view: 'text', type: 'string',},
+  files: {title: '投标复盘反馈',order: 13,view: 'file', type: 'string',},
 };
 
 /**

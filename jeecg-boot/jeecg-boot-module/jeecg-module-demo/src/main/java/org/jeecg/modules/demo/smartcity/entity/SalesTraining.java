@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 培训统计
  * @Author: jeecg-boot
- * @Date:   2025-11-12
+ * @Date:   2025-11-15
  * @Version: V1.0
  */
 @Data
@@ -63,6 +63,10 @@ public class SalesTraining implements Serializable {
 	@Excel(name = "参加人员", width = 15)
     @Schema(description = "参加人员")
     private java.lang.String participants;
+	/**培训教案*/
+	@Excel(name = "培训教案", width = 15)
+    @Schema(description = "培训教案")
+    private java.lang.String file;
 	/**创建人*/
     @Schema(description = "创建人")
     private java.lang.String createBy;

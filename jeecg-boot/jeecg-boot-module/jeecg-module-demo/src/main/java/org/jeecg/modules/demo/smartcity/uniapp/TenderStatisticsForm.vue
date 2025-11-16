@@ -76,6 +76,12 @@
                   <input  placeholder="请输入未中标原因" v-model="model.reasonNotWinning"/>
                 </view>
               </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
+                  <view class="title"><text space="ensp">投标复盘反馈：</text></view>
+                  <input  placeholder="请输入投标复盘反馈" v-model="model.files"/>
+                </view>
+              </view>
 				<view class="padding">
 					<button class="cu-btn block bg-blue margin-tb-sm lg" @click="onSubmit">
 						<text v-if="loading" class="cuIcon-loading2 cuIconfont-spin"></text>提交

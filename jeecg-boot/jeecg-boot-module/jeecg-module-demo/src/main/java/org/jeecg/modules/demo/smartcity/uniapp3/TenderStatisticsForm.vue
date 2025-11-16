@@ -177,6 +177,18 @@ navigationBarTitleText: '投标统计',
                   clearable
               />
         </view>
+          <view class="{ 'mt-14px': 1 == 0 }">
+             <wd-cell
+                :title="get4Label('投标复盘反馈')"
+                title-width="100px"
+             >
+
+            <online-file-custom
+            v-model:value="myFormData['files']"
+            name='files'
+            ></online-file-custom>
+            </wd-cell>
+        </view>
           </wd-cell-group>
         </wd-form>
       </view>

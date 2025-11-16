@@ -87,6 +87,18 @@ navigationBarTitleText: '培训统计',
                   clearable
               />
         </view>
+          <view class="{ 'mt-14px': 0 == 0 }">
+             <wd-cell
+                :title="get4Label('培训教案')"
+                title-width="100px"
+             >
+
+            <online-file-custom
+            v-model:value="myFormData['file']"
+            name='file'
+            ></online-file-custom>
+            </wd-cell>
+        </view>
           </wd-cell-group>
         </wd-form>
       </view>

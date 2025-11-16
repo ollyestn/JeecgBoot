@@ -66,4 +66,9 @@ export const columns = [
     align:"center",
     dataIndex: 'reasonNotWinning'
    },
+   {
+    title: '投标复盘反馈',
+    align:"center",
+    dataIndex: 'files',
+   },
 ];

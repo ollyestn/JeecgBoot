@@ -2,13 +2,13 @@
 {
 layout: 'default',
 style: {
-navigationBarTitleText: '对外接待',
+navigationBarTitleText: '客户接待统计',
 navigationStyle: 'custom',
 },
 }
 </route>
 <template>
-  <PageLayout navTitle="对外接待"  backRouteName="index" routeMethod="pushTab">
+  <PageLayout navTitle="客户接待统计"  backRouteName="index" routeMethod="pushTab">
     <view class="wrap">
       <z-paging
           ref="paging"

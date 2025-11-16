@@ -39,12 +39,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
- * @Description: 对外接待
+ * @Description: 客户接待统计
  * @Author: jeecg-boot
- * @Date:   2025-11-12
+ * @Date:   2025-11-15
  * @Version: V1.0
  */
-@Tag(name="对外接待")
+@Tag(name="客户接待统计")
 @RestController
 @RequestMapping("/smartcity/externalReception")
 @Slf4j
@@ -61,8 +61,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param req
 	 * @return
 	 */
-	//@AutoLog(value = "对外接待-分页列表查询")
-	@Operation(summary="对外接待-分页列表查询")
+	//@AutoLog(value = "客户接待统计-分页列表查询")
+	@Operation(summary="客户接待统计-分页列表查询")
 	@GetMapping(value = "/list")
 	public Result<IPage<ExternalReception>> queryPageList(ExternalReception externalReception,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -82,8 +82,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param externalReception
 	 * @return
 	 */
-	@AutoLog(value = "对外接待-添加")
-	@Operation(summary="对外接待-添加")
+	@AutoLog(value = "客户接待统计-添加")
+	@Operation(summary="客户接待统计-添加")
 	@RequiresPermissions("smartcity:external_reception:add")
 	@PostMapping(value = "/add")
 	public Result<String> add(@RequestBody ExternalReception externalReception) {
@@ -98,8 +98,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param externalReception
 	 * @return
 	 */
-	@AutoLog(value = "对外接待-编辑")
-	@Operation(summary="对外接待-编辑")
+	@AutoLog(value = "客户接待统计-编辑")
+	@Operation(summary="客户接待统计-编辑")
 	@RequiresPermissions("smartcity:external_reception:edit")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<String> edit(@RequestBody ExternalReception externalReception) {
@@ -113,8 +113,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "对外接待-通过id删除")
-	@Operation(summary="对外接待-通过id删除")
+	@AutoLog(value = "客户接待统计-通过id删除")
+	@Operation(summary="客户接待统计-通过id删除")
 	@RequiresPermissions("smartcity:external_reception:delete")
 	@DeleteMapping(value = "/delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
@@ -128,8 +128,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "对外接待-批量删除")
-	@Operation(summary="对外接待-批量删除")
+	@AutoLog(value = "客户接待统计-批量删除")
+	@Operation(summary="客户接待统计-批量删除")
 	@RequiresPermissions("smartcity:external_reception:deleteBatch")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<String> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
@@ -143,8 +143,8 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	 * @param id
 	 * @return
 	 */
-	//@AutoLog(value = "对外接待-通过id查询")
-	@Operation(summary="对外接待-通过id查询")
+	//@AutoLog(value = "客户接待统计-通过id查询")
+	@Operation(summary="客户接待统计-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<ExternalReception> queryById(@RequestParam(name="id",required=true) String id) {
 		ExternalReception externalReception = externalReceptionService.getById(id);
@@ -163,7 +163,7 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
     @RequiresPermissions("smartcity:external_reception:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, ExternalReception externalReception) {
-        return super.exportXls(request, externalReception, ExternalReception.class, "对外接待");
+        return super.exportXls(request, externalReception, ExternalReception.class, "客户接待统计");
     }
 
     /**

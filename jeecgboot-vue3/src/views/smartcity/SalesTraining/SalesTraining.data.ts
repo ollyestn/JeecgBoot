@@ -39,6 +39,11 @@ export const columns: BasicColumn[] = [
     align:"center",
     dataIndex: 'participants'
    },
+   {
+    title: '培训教案',
+    align:"center",
+    dataIndex: 'file',
+   },
 ];
 //查询数据
 export const searchFormSchema: FormSchema[] = [
@@ -117,6 +122,13 @@ export const formSchema: FormSchema[] = [
     field: 'participants',
     component: 'Input',
   },
+  {
+    label: '培训教案',
+    field: 'file',
+    component: 'JUpload',
+    componentProps:{
+     },
+  },
 	// TODO 主键隐藏字段，目前写死为ID
 	{
 	  label: '',
@@ -134,6 +146,7 @@ export const superQuerySchema = {
   traingType: {title: '组织形式',order: 3,view: 'text', type: 'string',},
   presenter: {title: '主讲人',order: 4,view: 'text', type: 'string',},
   participants: {title: '参加人员',order: 5,view: 'text', type: 'string',},
+  file: {title: '培训教案',order: 6,view: 'file', type: 'string',},
 };
 
 /**

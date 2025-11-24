@@ -18,7 +18,7 @@ services:
       --max_allowed_packet=128M
       --default-authentication-plugin=caching_sha2_password
     ports:
-      - 13306:3306
+      - 3316:3306
     networks:
       - jeecg-boot
 
@@ -39,8 +39,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: vector_db
-#    ports:
-#      - 5432:5432
+    ports:
+      - 5432:5432
     restart: always
     networks:
       - jeecg-boot
@@ -70,7 +70,7 @@ services:
     image: jeecg-boot-system
     hostname: jeecg-boot-system
     ports:
-      - 8080:8080
+      - 9999:8080
     networks:
       - jeecg-boot
     volumes:

@@ -42,7 +42,7 @@ export const columns: BasicColumn[] = [
    {
     title: '培训教案',
     align:"center",
-    dataIndex: 'file',
+    dataIndex: 'files',
    },
 ];
 //查询数据
@@ -124,7 +124,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     label: '培训教案',
-    field: 'file',
+    field: 'files',
     component: 'JUpload',
     componentProps:{
      },
@@ -146,7 +146,7 @@ export const superQuerySchema = {
   traingType: {title: '组织形式',order: 3,view: 'text', type: 'string',},
   presenter: {title: '主讲人',order: 4,view: 'text', type: 'string',},
   participants: {title: '参加人员',order: 5,view: 'text', type: 'string',},
-  file: {title: '培训教案',order: 6,view: 'file', type: 'string',},
+  files: {title: '培训教案',order: 6,view: 'file', type: 'string',},
 };
 
 /**

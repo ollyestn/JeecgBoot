@@ -34,6 +34,6 @@ export const columns = [
    {
     title: '培训教案',
     align:"center",
-    dataIndex: 'file',
+    dataIndex: 'files',
    },
 ];

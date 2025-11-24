@@ -30,7 +30,7 @@
       </template>
       <!--字段回显插槽-->
       <template v-slot:bodyCell="{ column, record, index, text }">
-        <template v-if="column.dataIndex==='img3'">
+        <template v-if="column.dataIndex==='visitFiles'">
           <!--文件字段回显插槽-->
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
           <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)">下载</a-button>

@@ -42,7 +42,7 @@
               <view class="cu-form-group">
                 <view class="flex align-center">
                   <view class="title"><text space="ensp">培训教案：</text></view>
-                  <input  placeholder="请输入培训教案" v-model="model.file"/>
+                  <input  placeholder="请输入培训教案" v-model="model.files"/>
                 </view>
               </view>
 				<view class="padding">

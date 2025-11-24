@@ -88,6 +88,30 @@ navigationBarTitleText: '客户接待统计',
               />
         </view>
           <view class="{ 'mt-14px': 0 == 0 }">
+               <!-- 图片 -->
+            <wd-cell
+                :title="get4Label('接待照片')"
+                title-width="100px"
+             >
+              <online-image
+                  v-model:value="myFormData['visitImg']"
+                  name='visitImg'
+              />
+            </wd-cell>
+        </view>
+          <view class="{ 'mt-14px': 1 == 0 }">
+             <wd-cell
+                :title="get4Label('附件')"
+                title-width="100px"
+             >
+
+            <online-file-custom
+            v-model:value="myFormData['visitFiles']"
+            name='visitFiles'
+            ></online-file-custom>
+            </wd-cell>
+        </view>
+          <view class="{ 'mt-14px': 0 == 0 }">
               <wd-input
                   label-width="100px"
                   v-model="myFormData['note']"
@@ -99,42 +123,6 @@ navigationBarTitleText: '客户接待统计',
                   ]"
                   clearable
               />
-        </view>
-          <view class="{ 'mt-14px': 1 == 0 }">
-               <!-- 图片 -->
-            <wd-cell
-                :title="get4Label('接待照片1')"
-                title-width="100px"
-             >
-              <online-image
-                  v-model:value="myFormData['img1']"
-                  name='img1'
-              />
-            </wd-cell>
-        </view>
-          <view class="{ 'mt-14px': 0 == 0 }">
-               <!-- 图片 -->
-            <wd-cell
-                :title="get4Label('接待照片2')"
-                title-width="100px"
-             >
-              <online-image
-                  v-model:value="myFormData['img2']"
-                  name='img2'
-              />
-            </wd-cell>
-        </view>
-          <view class="{ 'mt-14px': 1 == 0 }">
-             <wd-cell
-                :title="get4Label('接待照片3')"
-                title-width="100px"
-             >
-
-            <online-file-custom
-            v-model:value="myFormData['img3']"
-            name='img3'
-            ></online-file-custom>
-            </wd-cell>
         </view>
           </wd-cell-group>
         </wd-form>

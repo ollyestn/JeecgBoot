@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: 客户接待统计
  * @Author: jeecg-boot
- * @Date:   2025-11-15
+ * @Date:   2025-11-16
  * @Version: V1.0
  */
 public interface ExternalReceptionMapper extends BaseMapper<ExternalReception> {

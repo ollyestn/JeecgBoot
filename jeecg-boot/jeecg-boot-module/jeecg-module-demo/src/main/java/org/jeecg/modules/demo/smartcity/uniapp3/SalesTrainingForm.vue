@@ -94,8 +94,8 @@ navigationBarTitleText: '培训统计',
              >
 
             <online-file-custom
-            v-model:value="myFormData['file']"
-            name='file'
+            v-model:value="myFormData['files']"
+            name='files'
             ></online-file-custom>
             </wd-cell>
         </view>

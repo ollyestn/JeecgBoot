@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: 培训统计
  * @Author: jeecg-boot
- * @Date:   2025-11-15
+ * @Date:   2025-11-16
  * @Version: V1.0
  */
 public interface SalesTrainingMapper extends BaseMapper<SalesTraining> {

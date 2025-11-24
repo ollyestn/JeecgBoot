@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 客户接待统计
  * @Author: jeecg-boot
- * @Date:   2025-11-15
+ * @Date:   2025-11-16
  * @Version: V1.0
  */
 @Data
@@ -63,22 +63,18 @@ public class ExternalReception implements Serializable {
 	@Excel(name = "实际效果（简述）", width = 15)
     @Schema(description = "实际效果（简述）")
     private java.lang.String actualEffect;
+	/**接待照片*/
+	@Excel(name = "接待照片", width = 15)
+    @Schema(description = "接待照片")
+    private java.lang.String visitImg;
+	/**附件*/
+	@Excel(name = "附件", width = 15)
+    @Schema(description = "附件")
+    private java.lang.String visitFiles;
 	/**备注*/
 	@Excel(name = "备注", width = 15)
     @Schema(description = "备注")
     private java.lang.String note;
-	/**接待照片1*/
-	@Excel(name = "接待照片1", width = 15)
-    @Schema(description = "接待照片1")
-    private java.lang.String img1;
-	/**接待照片2*/
-	@Excel(name = "接待照片2", width = 15)
-    @Schema(description = "接待照片2")
-    private java.lang.String img2;
-	/**接待照片3*/
-	@Excel(name = "接待照片3", width = 15)
-    @Schema(description = "接待照片3")
-    private java.lang.String img3;
 	/**所属部门*/
     @Schema(description = "所属部门")
     private java.lang.String sysOrgCode;

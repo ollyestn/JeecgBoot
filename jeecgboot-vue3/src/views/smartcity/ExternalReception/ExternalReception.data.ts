@@ -40,26 +40,20 @@ export const columns: BasicColumn[] = [
     dataIndex: 'actualEffect'
    },
    {
+    title: '接待照片',
+    align:"center",
+    dataIndex: 'visitImg',
+    customRender:render.renderImage,
+   },
+   {
+    title: '附件',
+    align:"center",
+    dataIndex: 'visitFiles',
+   },
+   {
     title: '备注',
     align:"center",
     dataIndex: 'note'
-   },
-   {
-    title: '接待照片1',
-    align:"center",
-    dataIndex: 'img1',
-    customRender:render.renderImage,
-   },
-   {
-    title: '接待照片2',
-    align:"center",
-    dataIndex: 'img2',
-    customRender:render.renderImage,
-   },
-   {
-    title: '接待照片3',
-    align:"center",
-    dataIndex: 'img3',
    },
 ];
 //查询数据
@@ -134,32 +128,24 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
   },
   {
-    label: '备注',
-    field: 'note',
-    component: 'Input',
-  },
-  {
-    label: '接待照片1',
-    field: 'img1',
+    label: '接待照片',
+    field: 'visitImg',
      component: 'JImageUpload',
      componentProps:{
         fileMax: 0
       },
   },
   {
-    label: '接待照片2',
-    field: 'img2',
-     component: 'JImageUpload',
-     componentProps:{
-        fileMax: 0
-      },
-  },
-  {
-    label: '接待照片3',
-    field: 'img3',
+    label: '附件',
+    field: 'visitFiles',
     component: 'JUpload',
     componentProps:{
      },
+  },
+  {
+    label: '备注',
+    field: 'note',
+    component: 'Input',
   },
 	// TODO 主键隐藏字段，目前写死为ID
 	{
@@ -178,10 +164,9 @@ export const superQuerySchema = {
   ourLeadersAndPositions: {title: '我司参加接待领导及职务',order: 3,view: 'text', type: 'string',},
   visitPurpose: {title: '来访目的',order: 4,view: 'text', type: 'string',},
   actualEffect: {title: '实际效果（简述）',order: 5,view: 'text', type: 'string',},
-  note: {title: '备注',order: 6,view: 'text', type: 'string',},
-  img1: {title: '接待照片1',order: 7,view: 'image', type: 'string',},
-  img2: {title: '接待照片2',order: 8,view: 'image', type: 'string',},
-  img3: {title: '接待照片3',order: 9,view: 'file', type: 'string',},
+  visitImg: {title: '接待照片',order: 6,view: 'image', type: 'string',},
+  visitFiles: {title: '附件',order: 7,view: 'file', type: 'string',},
+  note: {title: '备注',order: 8,view: 'text', type: 'string',},
 };
 
 /**

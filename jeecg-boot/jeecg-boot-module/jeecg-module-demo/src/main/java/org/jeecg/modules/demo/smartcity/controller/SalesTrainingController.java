@@ -41,7 +41,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 培训统计
  * @Author: jeecg-boot
- * @Date:   2025-11-15
+ * @Date:   2025-11-16
  * @Version: V1.0
  */
 @Tag(name="培训统计")

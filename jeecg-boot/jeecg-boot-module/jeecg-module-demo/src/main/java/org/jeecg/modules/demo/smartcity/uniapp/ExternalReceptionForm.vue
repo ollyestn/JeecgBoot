@@ -41,26 +41,20 @@
               </view>
               <view class="cu-form-group">
                 <view class="flex align-center">
+                  <view class="title"><text space="ensp">接待照片：</text></view>
+                  <input  placeholder="请输入接待照片" v-model="model.visitImg"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
+                  <view class="title"><text space="ensp">附件：</text></view>
+                  <input  placeholder="请输入附件" v-model="model.visitFiles"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
                   <view class="title"><text space="ensp">备注：</text></view>
                   <input  placeholder="请输入备注" v-model="model.note"/>
-                </view>
-              </view>
-              <view class="cu-form-group">
-                <view class="flex align-center">
-                  <view class="title"><text space="ensp">接待照片1：</text></view>
-                  <input  placeholder="请输入接待照片1" v-model="model.img1"/>
-                </view>
-              </view>
-              <view class="cu-form-group">
-                <view class="flex align-center">
-                  <view class="title"><text space="ensp">接待照片2：</text></view>
-                  <input  placeholder="请输入接待照片2" v-model="model.img2"/>
-                </view>
-              </view>
-              <view class="cu-form-group">
-                <view class="flex align-center">
-                  <view class="title"><text space="ensp">接待照片3：</text></view>
-                  <input  placeholder="请输入接待照片3" v-model="model.img3"/>
                 </view>
               </view>
 				<view class="padding">

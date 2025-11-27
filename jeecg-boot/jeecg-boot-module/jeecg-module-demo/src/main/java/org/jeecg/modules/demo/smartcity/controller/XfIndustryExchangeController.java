@@ -8,12 +8,16 @@ import java.util.stream.Collectors;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+
+import com.alibaba.fastjson.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.query.QueryRuleEnum;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeDoc;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.demo.smartcity.entity.XfIndustryExchange;
 import org.jeecg.modules.demo.smartcity.service.IXfIndustryExchangeService;
 
@@ -22,6 +26,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.demo.smartcity.utils.AiragUtils;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -51,7 +56,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 public class XfIndustryExchangeController extends JeecgController<XfIndustryExchange, IXfIndustryExchangeService> {
 	@Autowired
 	private IXfIndustryExchangeService xfIndustryExchangeService;
-	
+
+    @Autowired
+    private IAiragKnowledgeDocService airagKnowledgeDocService;
+
 	/**
 	 * 分页列表查询
 	 *
@@ -89,7 +97,11 @@ public class XfIndustryExchangeController extends JeecgController<XfIndustryExch
 	public Result<String> add(@RequestBody XfIndustryExchange xfIndustryExchange) {
 		xfIndustryExchangeService.save(xfIndustryExchange);
 
-		return Result.OK("添加成功！");
+        // 同业交流统计
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService);
+        airagUtils.AddFiles(xfIndustryExchange.getFiles());
+
+        return Result.OK("添加成功！");
 	}
 	
 	/**
@@ -104,6 +116,11 @@ public class XfIndustryExchangeController extends JeecgController<XfIndustryExch
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<String> edit(@RequestBody XfIndustryExchange xfIndustryExchange) {
 		xfIndustryExchangeService.updateById(xfIndustryExchange);
+
+        // 同业交流统计
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService);
+        airagUtils.AddFiles(xfIndustryExchange.getFiles());
+
 		return Result.OK("编辑成功!");
 	}
 	

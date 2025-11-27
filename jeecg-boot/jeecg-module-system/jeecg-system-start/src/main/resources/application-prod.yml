@@ -145,8 +145,9 @@ spring:
           username: root
 #          url: jdbc:mysql://127.0.0.1:3316/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
 #          password: root
-          url: jdbc:mysql://127.0.0.1:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-          password: skrh@2025
+          url: jdbc:mysql://127.0.0.1:3316/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+#          password: skrh@2025
+          password: root
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:

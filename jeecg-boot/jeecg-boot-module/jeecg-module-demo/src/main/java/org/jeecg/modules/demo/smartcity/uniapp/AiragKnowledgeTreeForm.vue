@@ -22,6 +22,12 @@
               </view>
               <view class="cu-form-group">
                 <view class="flex align-center">
+                  <view class="title"><text space="ensp">层级：</text></view>
+                  <input type="number" placeholder="请输入层级" v-model="model.level"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
                   <view class="title"><text space="ensp">知识库id：</text></view>
                   <input  placeholder="请输入知识库id" v-model="model.knowledgeId"/>
                 </view>

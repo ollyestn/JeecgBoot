@@ -16,6 +16,11 @@ export const columns: BasicColumn[] = [
     dataIndex: 'pid'
    },
    {
+    title: '层级',
+    align:"center",
+    dataIndex: 'level'
+   },
+   {
     title: '知识库id',
     align:"center",
     dataIndex: 'knowledgeId'
@@ -49,6 +54,11 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
   },
   {
+    label: '层级',
+    field: 'level',
+    component: 'InputNumber',
+  },
+  {
     label: '知识库id',
     field: 'knowledgeId',
     component: 'Input',
@@ -66,7 +76,8 @@ export const formSchema: FormSchema[] = [
 export const superQuerySchema = {
   name: {title: '节点名称',order: 0,view: 'text', type: 'string',},
   pid: {title: '父节点',order: 1,view: 'text', type: 'string',},
-  knowledgeId: {title: '知识库id',order: 2,view: 'text', type: 'string',},
+  level: {title: '层级',order: 2,view: 'number', type: 'number',},
+  knowledgeId: {title: '知识库id',order: 3,view: 'text', type: 'string',},
 };
 
 /**

@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 知识库目录
  * @Author: jeecg-boot
- * @Date:   2025-11-27
+ * @Date:   2025-12-01
  * @Version: V1.0
  */
 @Data
@@ -45,6 +45,10 @@ public class AiragKnowledgeTree implements Serializable {
 	@Excel(name = "父节点", width = 15)
     @Schema(description = "父节点")
     private java.lang.String pid;
+	/**层级*/
+	@Excel(name = "层级", width = 15)
+    @Schema(description = "层级")
+    private java.lang.Integer level;
 	/**知识库id*/
 	@Excel(name = "知识库id", width = 15)
     @Schema(description = "知识库id")

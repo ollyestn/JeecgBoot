@@ -41,7 +41,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 知识库目录
  * @Author: jeecg-boot
- * @Date:   2025-11-27
+ * @Date:   2025-12-01
  * @Version: V1.0
  */
 @Tag(name="知识库目录")

@@ -40,6 +40,20 @@ navigationBarTitleText: '知识库目录',
               />
         </view>
           <view class="{ 'mt-14px': 0 == 0 }">
+               <wd-input
+                   label-width="100px"
+                   v-model="myFormData['level']"
+                   :label="get4Label('层级')"
+                   name='level'
+                   prop='level'
+                   placeholder="请选择层级"
+                   inputMode="numeric"
+                   :rules="[
+                   ]"
+                   clearable
+              />
+        </view>
+          <view class="{ 'mt-14px': 1 == 0 }">
               <wd-input
                   label-width="100px"
                   v-model="myFormData['knowledgeId']"

@@ -12,6 +12,11 @@ export const columns = [
     dataIndex: 'pid'
    },
    {
+    title: '层级',
+    align:"center",
+    dataIndex: 'level'
+   },
+   {
     title: '知识库id',
     align:"center",
     dataIndex: 'knowledgeId'

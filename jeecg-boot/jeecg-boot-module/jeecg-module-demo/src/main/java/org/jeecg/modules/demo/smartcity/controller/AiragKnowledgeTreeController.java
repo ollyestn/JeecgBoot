@@ -38,6 +38,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+
  /**
  * @Description: 知识库目录
  * @Author: jeecg-boot
@@ -179,4 +180,19 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
         return super.importExcel(request, response, AiragKnowledgeTree.class);
     }
 
+    /**
+     * 根据知识库ID获取目录树结构
+     *
+     * @param knowledgeId 知识库ID
+     * @return
+     */
+    @Operation(summary="根据知识库ID获取目录树结构")
+    @GetMapping(value = "/tree")
+    public Result<List<AiragKnowledgeTree>> queryTreeByKnowledgeId(@RequestParam(name="knowledgeId",required=true) String knowledgeId) {
+        QueryWrapper<AiragKnowledgeTree> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("knowledge_id", knowledgeId);
+        queryWrapper.orderByAsc("level", "pid");
+        List<AiragKnowledgeTree> treeList = airagKnowledgeTreeService.list(queryWrapper);
+        return Result.OK(treeList);
+    }
 }

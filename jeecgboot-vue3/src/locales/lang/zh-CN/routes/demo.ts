@@ -204,4 +204,11 @@ export default {
   jeecg: {
     JAreaLinkage: '区域选择',
   },
+  smartcity: {
+    moduleName: '智慧城市',
+    airag: {
+      knowledgeTree: '知识库目录',
+      knowledgeTreeDetail: '知识库详情',
+    },
+  },
 };

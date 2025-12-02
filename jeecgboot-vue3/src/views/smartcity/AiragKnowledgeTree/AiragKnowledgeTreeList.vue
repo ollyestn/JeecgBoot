@@ -30,6 +30,9 @@
       </template>
       <!--字段回显插槽-->
       <template v-slot:bodyCell="{ column, record, index, text }">
+        <template v-if="column.dataIndex === 'action'">
+          <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)"/>
+        </template>
       </template>
     </BasicTable>
     <!-- 表单区域 -->
@@ -39,6 +42,7 @@
 
 <script lang="ts" name="smartcity-airagKnowledgeTree" setup>
   import {ref, reactive, computed, unref} from 'vue';
+  import { useRouter } from 'vue-router';
   import {BasicTable, useTable, TableAction} from '/@/components/Table';
   import {useModal} from '/@/components/Modal';
   import { useListPage } from '/@/hooks/system/useListPage'
@@ -56,6 +60,7 @@
   const checkedKeys = ref<Array<string | number>>([]);
   const userStore = useUserStore();
   const { createMessage } = useMessage();
+  const router = useRouter();
   //注册model
   const [registerModal, {openModal}] = useModal();
   //注册table数据
@@ -136,7 +141,7 @@
    }
    /**
     * 详情
-   */
+    */
   function handleDetail(record: Recordable) {
      openModal(true, {
        record,
@@ -144,6 +149,19 @@
        showFooter: false,
      });
    }
+   
+   /**
+    * 跳转到知识库详情页面
+    */
+   function handleViewDetail(record: Recordable) {
+     router.push({
+       path: '/smartcity/airagKnowledgeTreeDetail',
+       query: {
+         knowledgeId: record.id
+       }
+     });
+   }
+   
    /**
     * 删除事件
     */
@@ -182,7 +200,12 @@
          {
            label: '详情',
            onClick: handleDetail.bind(null, record),
-         }, {
+         }, 
+         {
+           label: '查看文件',
+           onClick: handleViewDetail.bind(null, record),
+         },
+         {
            label: '删除',
            popConfirm: {
              title: '是否确认删除',
@@ -193,10 +216,6 @@
          }
        ]
    }
-
-
-
-
 </script>
 
 <style lang="less" scoped>

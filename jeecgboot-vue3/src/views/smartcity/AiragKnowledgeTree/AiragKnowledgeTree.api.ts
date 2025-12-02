@@ -11,6 +11,7 @@ enum Api {
   deleteBatch = '/smartcity/airagKnowledgeTree/deleteBatch',
   importExcel = '/smartcity/airagKnowledgeTree/importExcel',
   exportXls = '/smartcity/airagKnowledgeTree/exportXls',
+  tree = '/smartcity/airagKnowledgeTree/tree',
 }
 /**
  * 导出api
@@ -27,6 +28,13 @@ export const getImportUrl = Api.importExcel;
  */
 export const list = (params) =>
   defHttp.get({url: Api.list, params});
+
+/**
+ * 获取目录树结构
+ * @param params
+ */
+export const getTree = (params) =>
+  defHttp.get({url: Api.tree, params});
 
 /**
  * 删除单个

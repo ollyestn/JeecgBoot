@@ -62,6 +62,9 @@
     
     <!-- 文本明细 -->
     <AiTextDescModal @register="docTextDescRegister" />
+    
+    <!-- 节点操作 -->
+    <AiragKnowledgeTreeNodeModal @register="treeNodeModalRegister" @success="handleTreeSuccess" />
   </div>
 </template>
 
@@ -69,11 +72,14 @@
   import { defineComponent, ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import { BasicTree, TreeActionType } from '/@/components/Tree';
+  import type { ContextMenuItem } from '/@/components/Tree';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { getTree, knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from './AiKnowledgeBaseDetail.api';
+  import { saveOrUpdate, deleteOne } from '../AiragKnowledgeTree/AiragKnowledgeTree.api';
   import AiragKnowledgeDocTextModal from './components/AiragKnowledgeDocTextModal.vue';
   import AiTextDescModal from './components/AiTextDescModal.vue';
+  import AiragKnowledgeTreeNodeModal from './components/AiragKnowledgeTreeNodeModal.vue';
   import Icon from '@/components/Icon';
   import { useMessage } from '@/hooks/web/useMessage';
   import { getHeaders } from '@/utils/common/compUtils';
@@ -87,6 +93,7 @@
       TableAction,
       AiragKnowledgeDocTextModal,
       AiTextDescModal,
+      AiragKnowledgeTreeNodeModal,
       Icon,
     },
     setup() {
@@ -125,6 +132,7 @@
       // 注册模态框
       const [docTextRegister, { openModal: docTextOpenModal }] = useModal();
       const [docTextDescRegister, { openModal: docTextDescOpenModal }] = useModal();
+      const [treeNodeModalRegister, { openModal: treeNodeModalOpenModal }] = useModal();
       
       // 表格配置
       const [registerTable, { reload: reloadTable }] = useTable({
@@ -254,29 +262,43 @@
       }
 
       function getRightMenuList(node: any): ContextMenuItem[] {
-        return [
-          {
-            label: '新增',
-            handler: () => {
-              console.log('点击了新增', node);
+        // 根节点只有新增功能
+        if (node.pid === '0' || !node.pid) {
+          return [
+            {
+              label: '新增',
+              handler: () => {
+                handleAddNode(node);
+              },
+              icon: 'ant-design:plus-outlined',
+            }
+          ];
+        } else {
+          // 其他节点有新增、修改、删除功能
+          return [
+            {
+              label: '新增',
+              handler: () => {
+                handleAddNode(node);
+              },
+              icon: 'ant-design:plus-outlined',
             },
-            icon: 'bi:plus',
-          },
-          {
-            label: '修改',
-            handler: () => {
-              console.log('点击了修改', node);
+            {
+              label: '修改',
+              handler: () => {
+                handleEditNode(node);
+              },
+              icon: 'ant-design:edit-outlined',
             },
-            icon: 'bx:bxs-folder-open',
-          },
-          {
-            label: '删除',
-            handler: () => {
-              console.log('点击了删除', node);
-            },
-            icon: 'bx:bxs-folder-open',
-          },
-        ];
+            {
+              label: '删除',
+              handler: () => {
+                handleDeleteNode(node);
+              },
+              icon: 'ant-design:delete-outlined',
+            }
+          ];
+        }
       }
       
       // 树节点选择事件
@@ -288,6 +310,43 @@
         }
         // 重新加载文档列表
         reloadTable();
+      }
+      
+      // 处理新增节点
+      function handleAddNode(node: any) {
+        treeNodeModalOpenModal(true, { 
+          knowledgeId: knowledgeId.value,
+          record: node || null,  // 确保即使node为undefined也传递null
+          isUpdate: false
+        });
+      }
+      
+      // 处理编辑节点
+      function handleEditNode(node: any) {
+        treeNodeModalOpenModal(true, { 
+          knowledgeId: knowledgeId.value,
+          record: node,
+          isUpdate: true
+        });
+      }
+      
+      // 处理删除节点
+      function handleDeleteNode(node: any) {
+        deleteOne({ id: node.id }, () => {
+          createMessage.success('删除成功');
+          // 重新加载树数据
+          loadTreeData();
+          // 如果删除的是当前选中的节点，清除选中状态
+          if (selectedTreeNode.value && selectedTreeNode.value.id === node.id) {
+            selectedTreeNode.value = null;
+            reloadTable();
+          }
+        });
+      }
+      
+      // 树节点操作成功回调
+      function handleTreeSuccess() {
+        loadTreeData();
       }
       
       // 手动录入
@@ -411,6 +470,7 @@
         registerTable,
         docTextRegister,
         docTextDescRegister,
+        treeNodeModalRegister,
         knowledgeId,
         headers,
         uploadUrl,
@@ -423,6 +483,7 @@
         handleSuccess,
         onTreeSelect,
         getRightMenuList,
+        handleTreeSuccess,
       };
     },
   });

@@ -1,42 +1,52 @@
 <template>
   <div class="knowledge-detail-container">
     <a-layout style="height: 100%">
+      <!-- 左侧目录树 -->
       <a-layout-sider width="300" :style="siderStyle">
-        <div class="tree-header">
-          <span class="tree-title">目录结构</span>
-          <a-button type="link" @click="handleAddTreeNode">
-            <Icon icon="ant-design:plus-outlined" />
-          </a-button>
-        </div>
-        <a-tree
-          class="directory-tree"
-          :tree-data="treeData"
-          :expanded-keys="expandedKeys"
-          :selected-keys="selectedKeys"
-          :field-names="fieldNames"
-          @expand="onExpand"
-          @select="onSelect"
-        >
-          <template #title="{ name }">
-            <span>{{ name }}</span>
-          </template>
-        </a-tree>
+        <BasicTree
+          ref="treeRef"
+          title="目录结构"
+          toolbar
+          search
+          :treeData="treeData"
+          :fieldNames="fieldNames"
+          :clickRowToExpand="false"
+          @select="onTreeSelect"
+        />
       </a-layout-sider>
       
+      <!-- 右侧文档列表 -->
       <a-layout-content :style="contentStyle">
         <div class="file-list-container">
+          <!-- 工具栏 -->
           <div class="toolbar">
-            <a-button type="primary" @click="handleManualEntry">
+            <a-button type="primary" @click="handleCreateText">
               <Icon icon="ant-design:form-outlined" />手动录入
             </a-button>
-            <a-button type="primary" @click="handleFileUpload">
+            <a-button type="primary" @click="handleCreateUpload">
               <Icon icon="ant-design:cloud-upload-outlined" />文件上传
             </a-button>
-            <a-button type="primary" @click="handleDocLibraryUpload">
-              <Icon icon="ant-design:project-outlined" />文档库上传
+            <a-upload
+              accept=".zip"
+              name="file"
+              :data="{ knowId: knowledgeId }"
+              :showUploadList="false"
+              :headers="headers"
+              :beforeUpload="beforeUpload"
+              :action="uploadUrl"
+              @change="handleUploadChange"
+              style="display: inline-block;"
+            >
+              <a-button type="primary">
+                <Icon icon="ant-design:project-outlined" />文档库上传
+              </a-button>
+            </a-upload>
+            <a-button type="primary" @click="handleHitTest">
+              <Icon icon="ant-design:experiment-outlined" />命中测试
             </a-button>
           </div>
           
+          <!-- 文档列表 -->
           <BasicTable @register="registerTable">
             <template #action="{ record }">
               <TableAction :actions="getTableAction(record)" />
@@ -46,294 +56,347 @@
       </a-layout-content>
     </a-layout>
     
-    <!-- 添加/编辑目录节点模态框 -->
-    <AiragKnowledgeTreeModal @register="registerTreeModal" @success="loadTreeData" />
+    <!-- 手工录入文本 -->
+    <AiragKnowledgeDocTextModal @register="docTextRegister" @success="handleSuccess" />
     
-    <!-- 文件操作模态框 -->
-    <AiragKnowledgeDocModal @register="registerDocModal" @success="reloadTable" />
+    <!-- 文本明细 -->
+    <AiTextDescModal @register="docTextDescRegister" />
   </div>
 </template>
 
-<script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+<script lang="ts">
+  import { defineComponent, ref, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
+  import { BasicTree, TreeActionType } from '/@/components/Tree';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
-  import { getTree } from './AiragKnowledgeTree.api';
-  import { knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from '../../super/airag/aiknowledge/AiKnowledgeBase.api';
-  import AiragKnowledgeTreeModal from './components/AiragKnowledgeTreeModal.vue';
-  import AiragKnowledgeDocModal from './components/AiragKnowledgeDocModal.vue';
+  import { getTree, knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from './AiKnowledgeBaseDetail.api';
+  import AiragKnowledgeDocTextModal from './components/AiragKnowledgeDocTextModal.vue';
+  import AiTextDescModal from './components/AiTextDescModal.vue';
   import Icon from '@/components/Icon';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useMessage } from '@/hooks/web/useMessage';
+  import { getHeaders } from '@/utils/common/compUtils';
+  import { useGlobSetting } from '/@/hooks/setting';
 
-  const route = useRoute();
-  const { createMessage } = useMessage();
-
-  // 获取知识库ID
-  const knowledgeId = route.query.knowledgeId as string;
-
-  // 树结构相关
-  const treeData = ref<any[]>([]);
-  const expandedKeys = ref<string[]>([]);
-  const selectedKeys = ref<string[]>([]);
-  const fieldNames = { children: 'children', title: 'name', key: 'id' };
-
-  // 布局样式
-  const siderStyle = {
-    background: '#fff',
-    borderRight: '1px solid #eee',
-    padding: '16px',
-    height: '100%'
-  };
-
-  const contentStyle = {
-    background: '#fff',
-    padding: '16px',
-    height: '100%',
-    overflow: 'auto'
-  };
-
-  // 注册模态框
-  const [registerTreeModal, { openModal: openTreeModal }] = useModal();
-  const [registerDocModal, { openModal: openDocModal }] = useModal();
-
-  // 文件列表表格配置
-  const [registerTable, { reload: reloadTable }] = useTable({
-    title: '文件列表',
-    api: fetchFileList,
-    columns: [
-      {
-        title: '文件名称',
-        dataIndex: 'title',
-        width: 200,
-      },
-      {
-        title: '状态',
-        dataIndex: 'status',
-        width: 100,
-        customRender: ({ record }) => {
-          const statusMap: Record<string, string> = {
-            'draft': '草稿',
-            'building': '构建中',
-            'complete': '已完成',
-            'failed': '失败'
-          };
-          return statusMap[record.status] || record.status;
-        }
-      },
-      {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        width: 180,
-      },
-      {
-        title: '操作',
-        dataIndex: 'action',
-        width: 150,
-        slots: { customRender: 'action' },
-      }
-    ],
-    pagination: true,
-    striped: false,
-    useSearchForm: false,
-    showTableSetting: false,
-    bordered: true,
-    showIndexColumn: false,
-    canResize: false,
-    actionColumn: {
-      width: 120,
-      title: '操作',
-      dataIndex: 'action',
-      slots: { customRender: 'action' },
+  export default defineComponent({
+    name: 'AiKnowledgeBaseDetailList',
+    components: {
+      BasicTree,
+      BasicTable,
+      TableAction,
+      AiragKnowledgeDocTextModal,
+      AiTextDescModal,
+      Icon,
     },
-  });
-
-  // 获取文件列表数据
-  async function fetchFileList(params: Record<string, any>) {
-    if (!knowledgeId) {
-      return { records: [], total: 0 };
-    }
-
-    const queryParams = {
-      ...params,
-      knowledgeId: knowledgeId,
-      pid: selectedKeys.value.length > 0 ? selectedKeys.value[0] : null
-    };
-
-    try {
-      const res = await knowledgeDocList(queryParams);
-      if (res.success) {
-        return {
-          records: res.result.records || [],
-          total: res.result.total || 0
+    setup() {
+      const route = useRoute();
+      const { createMessage } = useMessage();
+      
+      // 知识库ID
+      const knowledgeId = ref<string>('');
+      
+      // 树相关
+      const treeRef = ref<Nullable<TreeActionType>>(null);
+      const treeData = ref<any[]>([]);
+      const fieldNames = { children: 'children', title: 'name', key: 'id' };
+      const selectedTreeNode = ref<any>(null);
+      
+      // 布局样式
+      const siderStyle = {
+        background: '#fff',
+        borderRight: '1px solid #eee',
+        padding: '16px',
+        height: '100%'
+      };
+      
+      const contentStyle = {
+        background: '#fff',
+        padding: '16px',
+        height: '100%',
+        overflow: 'auto'
+      };
+      
+      // 上传相关
+      const headers = getHeaders();
+      const globSetting = useGlobSetting();
+      const uploadUrl = ref<string>(globSetting.domainUrl + '/airag/knowledge/doc/import/zip');
+      
+      // 注册模态框
+      const [docTextRegister, { openModal: docTextOpenModal }] = useModal();
+      const [docTextDescRegister, { openModal: docTextDescOpenModal }] = useModal();
+      
+      // 表格配置
+      const [registerTable, { reload: reloadTable }] = useTable({
+        title: '文档列表',
+        api: fetchDocumentList,
+        columns: [
+          {
+            title: '文件名称',
+            dataIndex: 'title',
+            width: 200,
+          },
+          {
+            title: '文档类型',
+            dataIndex: 'type',
+            width: 100,
+            customRender: ({ record }: any) => {
+              return record.type === 'text' ? '文本' : '文件';
+            }
+          },
+          {
+            title: '状态',
+            dataIndex: 'status',
+            width: 100,
+            customRender: ({ record }: any) => {
+              const statusMap: Record<string, string> = {
+                draft: '草稿',
+                building: '构建中',
+                complete: '已完成',
+                failed: '失败'
+              };
+              return statusMap[record.status] || record.status;
+            }
+          },
+          {
+            title: '创建时间',
+            dataIndex: 'createTime',
+            width: 180,
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: 150,
+            slots: { customRender: 'action' },
+          }
+        ],
+        pagination: true,
+        striped: false,
+        useSearchForm: false,
+        showTableSetting: false,
+        bordered: true,
+        showIndexColumn: false,
+        canResize: false,
+        actionColumn: {
+          width: 150,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+        },
+      });
+      
+      // 获取文档列表
+      async function fetchDocumentList(params: any) {
+        // 如果没有选择节点，默认使用知识库ID
+        const nodeId = selectedTreeNode.value?.id || '0';
+        
+        const queryParams = {
+          ...params,
+          knowledgeId: knowledgeId.value,
+          nodeId: nodeId, // 添加节点ID参数
+          column: 'createTime',
+          order: 'desc'
         };
+        
+        try {
+          const res = await knowledgeDocList(queryParams);
+          if (res.success) {
+            return {
+              records: res.result.records || [],
+              total: res.result.total || 0
+            };
+          }
+        } catch (error) {
+          console.error('获取文档列表失败:', error);
+        }
+        return { records: [], total: 0 };
       }
-    } catch (error) {
-      console.error('获取文件列表失败:', error);
-    }
-    return { records: [], total: 0 };
-  }
-
-  // 加载目录树数据
-  async function loadTreeData() {
-    if (!knowledgeId) return;
-
-    try {
-      const res = await getTree({ knowledgeId });
-      if (res) {
-        // 将平铺数据转换为树形结构
-        treeData.value = buildTreeData(res.records || []);
-        // 默认展开所有节点
-        expandedKeys.value = getAllKeys(treeData.value);
-      }
-    } catch (error) {
-      console.error('加载目录树失败:', error);
-    }
-  }
-
-  // 将平铺数据转换为树形结构
-  interface TreeNode {
-    id: string;
-    pid: string;
-    name: string;
-    children: TreeNode[];
-    [key: string]: any;
-  }
-
-  function buildTreeData(data: any[]): TreeNode[] {
-    const map: Record<string, TreeNode> = {};
-    const roots: TreeNode[] = [];
-
-    // 初始化映射
-    data.forEach(item => {
-      map[item.id] = { ...item, children: [] };
-    });
-
-    // 构建树结构
-    data.forEach(item => {
-      const node = map[item.id];
-      if (item.pid === '0' || !item.pid) {
-        roots.push(node);
-      } else {
-        const parent = map[item.pid];
-        if (parent) {
-          parent.children.push(node);
+      
+      // 加载目录树数据
+      async function loadTreeData() {
+        if (!knowledgeId.value) return;
+        
+        try {
+          const res = await getTree({ knowledgeId: knowledgeId.value });
+          if (res.success) {
+            // 将平铺数据转换为树形结构
+            treeData.value = buildTreeData(res.result || []);
+          }
+        } catch (error) {
+          console.error('加载目录树失败:', error);
         }
       }
-    });
+      
+      // 构建树形数据
+      function buildTreeData(data: any[]): any[] {
+        const map: Record<string, any> = {};
+        const roots: any[] = [];
 
-    return roots;
-  }
+        // 初始化映射
+        data.forEach(item => {
+          map[item.id] = { ...item, children: [] };
+        });
 
-  // 获取所有节点的key
-  function getAllKeys(nodes: TreeNode[]): string[] {
-    const keys: string[] = [];
-    function traverse(items: TreeNode[]) {
-      items.forEach(item => {
-        keys.push(item.id);
-        if (item.children && item.children.length > 0) {
-          traverse(item.children);
-        }
-      });
-    }
-    traverse(nodes);
-    return keys;
-  }
+        // 构建树结构
+        data.forEach(item => {
+          const node = map[item.id];
+          if (item.pid === '0' || !item.pid) {
+            roots.push(node);
+          } else {
+            const parent = map[item.pid];
+            if (parent) {
+              parent.children.push(node);
+            }
+          }
+        });
 
-  // 树节点展开事件
-  function onExpand(expandedKeysValue: string[]) {
-    expandedKeys.value = expandedKeysValue;
-  }
-
-  // 树节点选择事件
-  function onSelect(selectedKeysValue: string[]) {
-    selectedKeys.value = selectedKeysValue;
-    // 重新加载文件列表
-    reloadTable();
-  }
-
-  // 添加目录节点
-  function handleAddTreeNode() {
-    openTreeModal(true, {
-      knowledgeId: knowledgeId,
-      isUpdate: false
-    });
-  }
-
-  // 手动录入
-  function handleManualEntry() {
-    openDocModal(true, {
-      knowledgeId: knowledgeId,
-      type: 'text'
-    });
-  }
-
-  // 文件上传
-  function handleFileUpload() {
-    openDocModal(true, {
-      knowledgeId: knowledgeId,
-      type: 'file'
-    });
-  }
-
-  // 文档库上传
-  function handleDocLibraryUpload() {
-    createMessage.info('文档库上传功能正在开发中...');
-  }
-
-  // 表格操作列
-  function getTableAction(record: Record<string, any>) {
-    return [
-      {
-        label: '向量化',
-        onClick: () => handleVectorization(record),
-        disabled: record.status === 'building'
-      },
-      {
-        label: '编辑',
-        onClick: () => handleEdit(record)
-      },
-      {
-        label: '删除',
-        popConfirm: {
-          title: '确定要删除该文件吗？',
-          confirm: () => handleDelete(record)
-        }
+        return roots;
       }
-    ];
-  }
-
-  // 向量化操作
-  async function handleVectorization(record: Record<string, any>) {
-    try {
-      knowledgeRebuildDoc({ docIds: record.id }, () => {
-        createMessage.success('向量化任务已提交');
+      
+      // 树节点选择事件
+      function onTreeSelect(selectedKeys: string[], e: any) {
+        if (selectedKeys.length > 0) {
+          selectedTreeNode.value = e.node.dataRef;
+        } else {
+          selectedTreeNode.value = null;
+        }
+        // 重新加载文档列表
         reloadTable();
+      }
+      
+      // 手动录入
+      function handleCreateText() {
+        docTextOpenModal(true, { 
+          knowledgeId: knowledgeId.value, 
+          type: "text",
+          nodeId: selectedTreeNode.value?.id || '0'
+        });
+      }
+      
+      // 文件上传
+      function handleCreateUpload() {
+        docTextOpenModal(true, { 
+          knowledgeId: knowledgeId.value, 
+          type: "file",
+          nodeId: selectedTreeNode.value?.id || '0'
+        });
+      }
+      
+      // 上传前事件
+      function beforeUpload(file: any) {
+        let fileType = file.type;
+        if (fileType !== 'application/zip' && fileType !== 'application/x-zip-compressed') {
+          createMessage.warning('请上传zip文件');
+          return false;
+        }
+        return true;
+      }
+      
+      // 文件上传回调事件
+      function handleUploadChange(info: any) {
+        let { file } = info;
+        if (file.status === 'error' || (file.response && file.response.code == 500)) {
+          createMessage.error(file.response?.message || `${file.name} 上传失败,请查看服务端日志`);
+          return;
+        }
+        if (file.status === 'done') {
+          if (!file.response.success) {
+            createMessage.warning(file.response.message);
+            return;
+          }
+          createMessage.success(file.response.message);
+          handleSuccess();
+        }
+      }
+      
+      // 命中测试
+      function handleHitTest() {
+        createMessage.info('命中测试功能待实现');
+      }
+      
+      // 表格操作列
+      function getTableAction(record: any): any[] {
+        return [
+          {
+            label: '向量化',
+            onClick: handleVectorization.bind(null, record),
+          },
+          {
+            label: '编辑',
+            onClick: handleEdit.bind(null, record),
+          },
+          {
+            label: '删除',
+            color: 'error',
+            popConfirm: {
+              title: '是否确认删除',
+              confirm: handleDelete.bind(null, record),
+            },
+          }
+        ];
+      }
+      
+      // 向量化
+      async function handleVectorization(record: any) {
+        try {
+          await knowledgeRebuildDoc({ docIds: record.id }, handleSuccess);
+          createMessage.success('向量化任务已提交');
+        } catch (error: any) {
+          createMessage.error('向量化失败: ' + (error.message || '未知错误'));
+        }
+      }
+      
+      // 编辑文件
+      function handleEdit(record: any) {
+        docTextOpenModal(true, {
+          record,
+          isUpdate: true
+        });
+      }
+      
+      // 删除文件
+      function handleDelete(record: any) {
+        knowledgeDeleteBatchDoc({ ids: record.id }, () => {
+          createMessage.success('删除成功');
+          reloadTable();
+        });
+      }
+      
+      // 操作成功回调
+      function handleSuccess() {
+        reloadTable();
+      }
+      
+      // 组件挂载时加载数据
+      onMounted(() => {
+        // 获取知识库ID
+        knowledgeId.value = route.query.knowledgeId as string || '';
+        if (knowledgeId.value) {
+          loadTreeData();
+        }
       });
-    } catch (error: any) {
-      createMessage.error('向量化失败: ' + (error.message || '未知错误'));
-    }
-  }
-
-  // 编辑文件
-  function handleEdit(record: Record<string, any>) {
-    openDocModal(true, {
-      record,
-      isUpdate: true
-    });
-  }
-
-  // 删除文件
-  function handleDelete(record: Record<string, any>) {
-    knowledgeDeleteBatchDoc({ ids: record.id }, () => {
-      createMessage.success('删除成功');
-      reloadTable();
-    });
-  }
-
-  // 组件挂载时加载数据
-  onMounted(() => {
-    loadTreeData();
+      
+      return {
+        treeRef,
+        treeData,
+        fieldNames,
+        siderStyle,
+        contentStyle,
+        registerTable,
+        docTextRegister,
+        docTextDescRegister,
+        knowledgeId,
+        headers,
+        uploadUrl,
+        handleCreateText,
+        handleCreateUpload,
+        beforeUpload,
+        handleUploadChange,
+        handleHitTest,
+        getTableAction,
+        handleSuccess,
+        onTreeSelect
+      };
+    },
   });
 </script>
 
@@ -341,24 +404,6 @@
 .knowledge-detail-container {
   height: 100%;
   background: #fff;
-  
-  .tree-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #eee;
-    
-    .tree-title {
-      font-size: 16px;
-      font-weight: 500;
-    }
-  }
-  
-  .directory-tree {
-    background: #fff;
-  }
   
   .file-list-container {
     height: 100%;

@@ -188,6 +188,7 @@ public class AiragKnowledgeController {
                                                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                                   HttpServletRequest req) {
+        airagKnowledgeDoc.setKnowledgeId("1995215562666143746");
         AssertUtils.assertNotEmpty("请先选择知识库", airagKnowledgeDoc.getKnowledgeId());
         QueryWrapper<AiragKnowledgeDoc> queryWrapper = QueryGenerator.initQueryWrapper(airagKnowledgeDoc, req.getParameterMap());
         Page<AiragKnowledgeDoc> page = new Page<>(pageNo, pageSize);

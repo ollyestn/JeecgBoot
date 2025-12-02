@@ -378,4 +378,76 @@ public class AiragKnowledgeController {
         return Result.OK(airagKnowledges);
     }
 
+    /**
+     * 下载知识库文档
+     *
+     * @param docId 文档id
+     * @return
+     * @author jeecg-boot
+     * @date 2025/12/2
+     */
+    @GetMapping(value = "/doc/download/{docId}")
+    public void downloadDocument(@PathVariable("docId") String docId, HttpServletResponse response) {
+        try {
+            AiragKnowledgeDoc doc = airagKnowledgeDocService.getById(docId);
+            if (doc == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 获取文件路径
+            String metadataStr = doc.getMetadata();
+            if (oConvertUtils.isEmpty(metadataStr)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            JSONObject metadata = JSONObject.parseObject(metadataStr);
+            String filePath = metadata.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH);
+            if (oConvertUtils.isEmpty(filePath)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 处理网络资源路径
+            filePath = embeddingHandler.ensureFile(filePath);
+
+            File file = new File(filePath);
+            if (!file.exists()) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 设置响应头
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment;filename=" + 
+                URLEncoder.encode(doc.getTitle() + getFileExtension(file.getName()), "UTF-8"));
+
+            // 输出文件内容
+            try (InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+                 OutputStream outputStream = response.getOutputStream()) {
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = inputStream.read(buf)) != -1) {
+                    outputStream.write(buf, 0, len);
+                }
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            log.error("下载文档失败: " + e.getMessage(), e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 获取文件扩展名
+     * @param fileName
+     * @return
+     */
+    private String getFileExtension(String fileName) {
+        if (fileName == null || fileName.lastIndexOf(".") == -1) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
 }

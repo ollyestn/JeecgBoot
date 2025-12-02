@@ -16,6 +16,7 @@ enum Api {
   knowledgeDeleteAllDoc = '/airag/knowledge/doc/deleteAll',
   knowledgeRebuildDoc = '/airag/knowledge/doc/rebuild',
   knowledgeEmbeddingHitTest = '/airag/knowledge/embedding/hitTest',
+  knowledgeDocDownload = '/airag/knowledge/doc/download',
   //知识库目录树
   knowledgeTree = '/smartcity/airagKnowledgeTree/tree',
 }
@@ -127,6 +128,17 @@ export const knowledgeDeleteAllDoc = (knowId: string, handleSuccess) => {
   return defHttp.delete({ url: Api.knowledgeDeleteAllDoc, params: {knowId} }, { joinParamsToUrl: true }).then(() => {
     handleSuccess();
   });
+};
+
+/**
+ * 下载知识库文档
+ * @param docId
+ */
+export const knowledgeDocDownload = (docId: string) => {
+  return defHttp.get({ 
+    url: Api.knowledgeDocDownload + '/' + docId,
+    responseType: 'blob'
+  }, { isTransformResponse: false });
 };
 
 /**

@@ -88,6 +88,7 @@
   import { useModal } from '/@/components/Modal';
   import { getTree, knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from './AiKnowledgeBaseDetail.api';
   import { saveOrUpdate, deleteOne } from '../AiragKnowledgeTree/AiragKnowledgeTree.api';
+  import { knowledgeDocDownload } from './AiKnowledgeBaseDetail.api';
   import AiragKnowledgeDocTextModal from './components/AiragKnowledgeDocTextModal.vue';
   import AiTextDescModal from './components/AiTextDescModal.vue';
   import AiragKnowledgeTreeNodeModal from './components/AiragKnowledgeTreeNodeModal.vue';
@@ -420,6 +421,10 @@
             onClick: handleEdit.bind(null, record),
           },
           {
+            label: '下载',
+            onClick: handleDownload.bind(null, record),
+          },
+          {
             label: '删除',
             color: 'error',
             popConfirm: {
@@ -445,6 +450,53 @@
         docTextOpenModal(true, {
           record,
           isUpdate: true
+        });
+      }
+      
+      // 下载文件
+      function handleDownload(record: any) {
+        knowledgeDocDownload(record.id).then((data) => {
+          if (!data || data.size === 0) {
+            createMessage.warning('文件下载失败');
+            return;
+          }
+          
+          // 从元数据中获取原始文件名
+          let fileName = record.title;
+          try {
+            if (record.metadata) {
+              const metadata = typeof record.metadata === 'string' ? JSON.parse(record.metadata) : record.metadata;
+              if (metadata.filePath) {
+                const filePath = metadata.filePath;
+                const lastSlashIndex = filePath.lastIndexOf('/');
+                const actualFileName = lastSlashIndex !== -1 ? filePath.substring(lastSlashIndex + 1) : filePath;
+                // 从实际文件名中提取扩展名
+                const dotIndex = actualFileName.lastIndexOf('.');
+                if (dotIndex !== -1) {
+                  fileName = record.title + actualFileName.substring(dotIndex);
+                } else {
+                  fileName = record.title;
+                }
+              }
+            }
+          } catch (e) {
+            console.warn('解析元数据失败，使用默认文件名:', e);
+            fileName = record.title;
+          }
+          
+          // 创建下载链接
+          let url = window.URL.createObjectURL(new Blob([data]));
+          let link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link); //下载完成移除元素
+          window.URL.revokeObjectURL(url); //释放掉blob对象
+        }).catch((error) => {
+          console.error('下载失败:', error);
+          createMessage.error('文件下载失败: ' + (error.message || '未知错误'));
         });
       }
       
@@ -503,6 +555,7 @@
         getRightMenuList,
         handleTreeSuccess,
         handleSearch,
+        handleDownload,
       };
     },
   });

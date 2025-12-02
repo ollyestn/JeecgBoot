@@ -1,6 +1,6 @@
-package org.jeecg.modules.demo.smartcity.service;
+package org.jeecg.modules.airag.llm.service;
 
-import org.jeecg.modules.demo.smartcity.entity.AiragKnowledgeTree;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeTree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

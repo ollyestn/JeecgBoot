@@ -17,6 +17,8 @@ import org.jeecg.modules.airag.llm.entity.AiragKnowledgeDoc;
 import org.jeecg.modules.airag.llm.handler.EmbeddingHandler;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeService;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeTree;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,9 @@ public class AiragKnowledgeController {
 
     @Autowired
     EmbeddingHandler embeddingHandler;
+
+    @Autowired
+    private IAiragKnowledgeTreeService airagKnowledgeTreeService;
 
     /**
      * 分页列表查询知识库
@@ -81,6 +86,12 @@ public class AiragKnowledgeController {
     public Result<String> add(@RequestBody AiragKnowledge airagKnowledge) {
         airagKnowledge.setStatus(LLMConsts.STATUS_ENABLE);
         airagKnowledgeService.save(airagKnowledge);
+        AiragKnowledgeTree airagKnowledgeTree = new  AiragKnowledgeTree();
+        airagKnowledgeTree.setKnowledgeId(airagKnowledge.getId());
+        airagKnowledgeTree.setName(airagKnowledge.getName());
+        airagKnowledgeTree.setLevel(1);
+        airagKnowledgeTree.setPid("-1");
+        airagKnowledgeTreeService.save(airagKnowledgeTree);
         return Result.OK("添加成功！");
     }
 
@@ -188,7 +199,6 @@ public class AiragKnowledgeController {
                                                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                                   HttpServletRequest req) {
-        airagKnowledgeDoc.setKnowledgeId("1995215562666143746");
         AssertUtils.assertNotEmpty("请先选择知识库", airagKnowledgeDoc.getKnowledgeId());
         QueryWrapper<AiragKnowledgeDoc> queryWrapper = QueryGenerator.initQueryWrapper(airagKnowledgeDoc, req.getParameterMap());
         Page<AiragKnowledgeDoc> page = new Page<>(pageNo, pageSize);

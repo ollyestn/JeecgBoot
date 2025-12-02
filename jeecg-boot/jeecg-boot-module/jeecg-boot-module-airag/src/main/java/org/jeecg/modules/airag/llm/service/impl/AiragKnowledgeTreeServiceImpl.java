@@ -1,8 +1,8 @@
-package org.jeecg.modules.demo.smartcity.service.impl;
+package org.jeecg.modules.airag.llm.service.impl;
 
-import org.jeecg.modules.demo.smartcity.entity.AiragKnowledgeTree;
-import org.jeecg.modules.demo.smartcity.mapper.AiragKnowledgeTreeMapper;
-import org.jeecg.modules.demo.smartcity.service.IAiragKnowledgeTreeService;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeTree;
+import org.jeecg.modules.airag.llm.mapper.AiragKnowledgeTreeMapper;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

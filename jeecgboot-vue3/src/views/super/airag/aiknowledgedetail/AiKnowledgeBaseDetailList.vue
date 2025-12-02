@@ -5,12 +5,13 @@
       <a-layout-sider width="300" :style="siderStyle">
         <BasicTree
           ref="treeRef"
-          title="目录结构"
+          title="知识库目录"
           toolbar
           search
           :treeData="treeData"
           :fieldNames="fieldNames"
           :clickRowToExpand="false"
+          :beforeRightClick="getRightMenuList"
           @select="onTreeSelect"
         />
       </a-layout-sider>
@@ -127,7 +128,7 @@
       
       // 表格配置
       const [registerTable, { reload: reloadTable }] = useTable({
-        title: '文档列表',
+        title: '',
         api: fetchDocumentList,
         columns: [
           {
@@ -250,6 +251,25 @@
         });
 
         return roots;
+      }
+
+      function getRightMenuList(node: any): ContextMenuItem[] {
+        return [
+          {
+            label: '新增',
+            handler: () => {
+              console.log('点击了新增', node);
+            },
+            icon: 'bi:plus',
+          },
+          {
+            label: '删除',
+            handler: () => {
+              console.log('点击了删除', node);
+            },
+            icon: 'bx:bxs-folder-open',
+          },
+        ];
       }
       
       // 树节点选择事件
@@ -394,7 +414,8 @@
         handleHitTest,
         getTableAction,
         handleSuccess,
-        onTreeSelect
+        onTreeSelect,
+        getRightMenuList,
       };
     },
   });

@@ -1,9 +1,6 @@
-package org.jeecg.modules.demo.smartcity.mapper;
+package org.jeecg.modules.airag.llm.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.jeecg.modules.demo.smartcity.entity.AiragKnowledgeTree;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeTree;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

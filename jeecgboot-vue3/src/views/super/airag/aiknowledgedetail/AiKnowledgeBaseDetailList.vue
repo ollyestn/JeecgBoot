@@ -263,6 +263,13 @@
             icon: 'bi:plus',
           },
           {
+            label: '修改',
+            handler: () => {
+              console.log('点击了修改', node);
+            },
+            icon: 'bx:bxs-folder-open',
+          },
+          {
             label: '删除',
             handler: () => {
               console.log('点击了删除', node);

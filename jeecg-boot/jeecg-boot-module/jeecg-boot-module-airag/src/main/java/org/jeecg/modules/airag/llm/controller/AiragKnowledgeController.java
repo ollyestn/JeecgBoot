@@ -90,7 +90,7 @@ public class AiragKnowledgeController {
         airagKnowledgeTree.setKnowledgeId(airagKnowledge.getId());
         airagKnowledgeTree.setName(airagKnowledge.getName());
         airagKnowledgeTree.setLevel(1);
-        airagKnowledgeTree.setPid("-1");
+        airagKnowledgeTree.setPid("0");
         airagKnowledgeTreeService.save(airagKnowledgeTree);
         return Result.OK("添加成功！");
     }
@@ -117,6 +117,10 @@ public class AiragKnowledgeController {
             // 更新了模型,重建文档
             airagKnowledgeDocService.rebuildDocumentByKnowId(airagKnowledge.getId());
         }
+
+        //同步更新知识库树目录
+        //airagKnowledgeTreeService.update();
+
         return Result.OK("编辑成功!");
     }
 
@@ -163,6 +167,10 @@ public class AiragKnowledgeController {
         //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
         airagKnowledgeDocService.removeByKnowIds(Collections.singletonList(id));
         airagKnowledgeService.removeById(id);
+
+        // 同步删除知识库目录
+        airagKnowledgeTreeService.remove(new QueryWrapper<AiragKnowledgeTree>().eq("knowledge_id", id));
+
         return Result.OK("删除成功!");
     }
 

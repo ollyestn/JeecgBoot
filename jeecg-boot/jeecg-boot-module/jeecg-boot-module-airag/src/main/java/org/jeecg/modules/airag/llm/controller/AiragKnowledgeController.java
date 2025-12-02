@@ -238,8 +238,9 @@ public class AiragKnowledgeController {
     @PostMapping(value = "/doc/import/zip")
     @RequiresPermissions("airag:knowledge:doc:zip")
     public Result<?> importDocumentFromZip(@RequestParam(name = "knowId", required = true) String knowId,
+                                           @RequestParam(name = "nodeId", required = true) String nodeId,
                                            @RequestParam(name = "file", required = true) MultipartFile file) {
-        return airagKnowledgeDocService.importDocumentFromZip(knowId,file);
+        return airagKnowledgeDocService.importDocumentFromZip(knowId,nodeId,file);
     }
 
     /**

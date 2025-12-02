@@ -290,11 +290,12 @@ public class AiragKnowledgeDocServiceImpl extends ServiceImpl<AiragKnowledgeDocM
 
     @Transactional(rollbackFor = {java.lang.Exception.class})
     @Override
-    public Result<?> importDocumentFromZip(String knowId, MultipartFile zipFile) {
+    public Result<?> importDocumentFromZip(String knowId, String nodeId, MultipartFile zipFile) {
         AssertUtils.assertNotEmpty("请先选择知识库", knowId);
+        AssertUtils.assertNotEmpty("请先选择树节点", nodeId);
         AssertUtils.assertNotEmpty("请上传文件", zipFile);
         long startTime = System.currentTimeMillis();
-        log.info("开始上传知识库文档(zip), 知识库id: {}, 文件名: {}", knowId, zipFile.getOriginalFilename());
+        log.info("开始上传知识库文档(zip), 知识库id: {}, 目录树id: {}, 文件名: {}", knowId, nodeId, zipFile.getOriginalFilename());
 
         try {
             String bizPath = knowId + File.separator + UUIDGenerator.generate();
@@ -322,6 +323,7 @@ public class AiragKnowledgeDocServiceImpl extends ServiceImpl<AiragKnowledgeDocM
                 String baseName = FilenameUtils.getBaseName(fileName);
                 AiragKnowledgeDoc doc = new AiragKnowledgeDoc();
                 doc.setKnowledgeId(knowId);
+                doc.setNodeId(nodeId);
                 doc.setTitle(baseName);
                 doc.setType(LLMConsts.KNOWLEDGE_DOC_TYPE_FILE);
                 doc.setStatus(LLMConsts.KNOWLEDGE_DOC_STATUS_DRAFT);

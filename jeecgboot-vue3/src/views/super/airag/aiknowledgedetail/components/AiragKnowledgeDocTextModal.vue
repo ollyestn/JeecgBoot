@@ -30,8 +30,9 @@
 
       //保存或修改
       const isUpdate = ref<boolean>(false);
-      //知识库id
+      //知识库id+节点Id
       const knowledgeId = ref<string>();
+      const nodeId = ref<string>();
       //表单配置
       const [registerForm, { resetFields, setFieldsValue, validate, clearValidate, updateSchema }] = useForm({
         schemas: docTextSchema,
@@ -57,6 +58,7 @@
           });
         } else {
           knowledgeId.value = data.knowledgeId;
+          nodeId.value = data.nodeId;
           await setFieldsValue({ type: data.type })
         }
         setModalProps({ bodyStyle: { padding: '10px' } });
@@ -71,6 +73,7 @@
           let values = await validate();
           if (!unref(isUpdate)) {
             values.knowledgeId = knowledgeId.value;
+            values.nodeId = nodeId.value;
           }
           if(values.filePath){
             values.metadata = JSON.stringify({ filePath: values.filePath });

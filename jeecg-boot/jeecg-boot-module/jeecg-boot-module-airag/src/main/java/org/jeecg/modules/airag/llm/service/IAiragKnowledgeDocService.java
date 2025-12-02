@@ -83,5 +83,5 @@ public interface IAiragKnowledgeDocService extends IService<AiragKnowledgeDoc> {
      * @author chenrui
      * @date 2025/3/20 13:50
      */
-    Result<?> importDocumentFromZip(String knowId, MultipartFile file);
+    Result<?> importDocumentFromZip(String knowId, String nodeId, MultipartFile file);
 }

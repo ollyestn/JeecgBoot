@@ -19,6 +19,17 @@
       <!-- 右侧文档列表 -->
       <a-layout-content :style="contentStyle">
         <div class="file-list-container">
+          <!-- 查询条件 -->
+          <div class="search-box">
+            <a-input-search
+              v-model:value="searchTitle"
+              placeholder="请输入文件名称"
+              enter-button="查询"
+              @search="handleSearch"
+              style="width: 300px; margin-bottom: 16px;"
+            />
+          </div>
+
           <!-- 工具栏 -->
           <div class="toolbar">
             <a-button type="primary" @click="handleCreateText">
@@ -30,7 +41,7 @@
             <a-upload
               accept=".zip"
               name="file"
-              :data="{ knowId: knowledgeId }"
+              :data="{ knowId: knowledgeId, nodeId: selectedTreeNode.value?.id || '0' }"
               :showUploadList="false"
               :headers="headers"
               :beforeUpload="beforeUpload"
@@ -107,8 +118,11 @@
       const treeRef = ref<Nullable<TreeActionType>>(null);
       const treeData = ref<any[]>([]);
       const fieldNames = { children: 'children', title: 'name', key: 'id' };
-      const selectedTreeNode = ref<any>(null);
+      const selectedTreeNode = ref<any>({id:'0'});
       
+      // 搜索相关
+      const searchTitle = ref<string>('');
+
       // 布局样式
       const siderStyle = {
         background: '#fff',
@@ -140,7 +154,7 @@
         api: fetchDocumentList,
         columns: [
           {
-            title: '文件名称',
+            title: '标题',
             dataIndex: 'title',
             width: 200,
           },
@@ -170,12 +184,6 @@
             title: '创建时间',
             dataIndex: 'createTime',
             width: 180,
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            width: 150,
-            slots: { customRender: 'action' },
           }
         ],
         pagination: true,
@@ -197,11 +205,12 @@
       async function fetchDocumentList(params: any) {
         // 如果没有选择节点，默认使用知识库ID
         const nodeId = selectedTreeNode.value?.id || '0';
-        
+
         const queryParams = {
           ...params,
           knowledgeId: knowledgeId.value,
           nodeId: nodeId, // 添加节点ID参数
+          title: searchTitle.value, // 添加标题搜索参数
           column: 'createTime',
           order: 'desc'
         };
@@ -447,6 +456,13 @@
         });
       }
       
+      // 处理搜索
+      function handleSearch(value: string) {
+        searchTitle.value = value;
+        // 重新加载表格数据，会自动调用fetchDocumentList并传入搜索参数
+        reloadTable();
+      }
+
       // 操作成功回调
       function handleSuccess() {
         reloadTable();
@@ -465,6 +481,8 @@
         treeRef,
         treeData,
         fieldNames,
+        searchTitle,
+        selectedTreeNode,
         siderStyle,
         contentStyle,
         registerTable,
@@ -484,6 +502,7 @@
         onTreeSelect,
         getRightMenuList,
         handleTreeSuccess,
+        handleSearch,
       };
     },
   });
@@ -499,6 +518,10 @@
     display: flex;
     flex-direction: column;
     
+    .search-box {
+      margin-bottom: 16px;
+    }
+
     .toolbar {
       margin-bottom: 16px;
       

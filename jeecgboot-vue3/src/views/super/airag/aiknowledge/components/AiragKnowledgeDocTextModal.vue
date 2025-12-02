@@ -57,6 +57,7 @@
           });
         } else {
           knowledgeId.value = data.knowledgeId;
+          nodeId.value = data.nodeId;
           await setFieldsValue({ type: data.type })
         }
         setModalProps({ bodyStyle: { padding: '10px' } });

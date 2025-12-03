@@ -41,7 +41,7 @@
             <a-upload
               accept=".zip"
               name="file"
-              :data="{ knowId: knowledgeId, nodeId: selectedTreeNode.value?.id || '0' }"
+              :data="getUploadData()"
               :showUploadList="false"
               :headers="headers"
               :beforeUpload="beforeUpload"
@@ -313,6 +313,7 @@
       
       // 树节点选择事件
       function onTreeSelect(selectedKeys: string[], e: any) {
+        //console.log("selectedKeys:", selectedKeys);
         if (selectedKeys.length > 0) {
           selectedTreeNode.value = e.node.dataRef;
         } else {
@@ -375,6 +376,14 @@
           type: "file",
           nodeId: selectedTreeNode.value?.id || '0'
         });
+      }
+      
+      // 获取上传数据
+      function getUploadData() {
+        return {
+          knowId: knowledgeId.value,
+          nodeId: selectedTreeNode.value?.id || '0'
+        };
       }
       
       // 上传前事件
@@ -556,6 +565,7 @@
         handleTreeSuccess,
         handleSearch,
         handleDownload,
+        getUploadData,
       };
     },
   });

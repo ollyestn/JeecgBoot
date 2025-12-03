@@ -31,7 +31,7 @@
 			return {
 				CustomBar:this.CustomBar,
 				NavBarColor:this.NavBarColor,
-				url: "/smartcity/airagKnowledgeTree/list",
+				url: "/airag/airagKnowledgeTree/list",
 			};
 		},
 		methods: {

@@ -52,7 +52,7 @@ defineOptions({
   }
 })
 //分页加载配置
-let { toast, router, paging, dataList, queryList } = usePageList('/smartcity/airagKnowledgeTree/list');
+let { toast, router, paging, dataList, queryList } = usePageList('/airag/airagKnowledgeTree/list');
 
 //样式
 const getBoxStyle = computed(() => {
@@ -62,7 +62,7 @@ const getBoxStyle = computed(() => {
 // 其他操作
 const handleAction = (val, item) => {
   if (val == 'del') {
-    http.delete("/smartcity/airagKnowledgeTree/delete?id="+item.id,{id:item.id}).then((res) => {
+    http.delete("/airag/airagKnowledgeTree/delete?id="+item.id,{id:item.id}).then((res) => {
       toast.success('删除成功~')
       paging.value.reload()
     })

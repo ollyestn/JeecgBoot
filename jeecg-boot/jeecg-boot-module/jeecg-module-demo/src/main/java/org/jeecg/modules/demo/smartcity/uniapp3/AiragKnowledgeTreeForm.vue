@@ -122,7 +122,7 @@ const initForm = (item) => {
 }
 // 初始化数据
 const initData = () => {
-  http.get("/smartcity/airagKnowledgeTree/queryById",{id:dataId.value}).then((res) => {
+  http.get("/airag/airagKnowledgeTree/queryById",{id:dataId.value}).then((res) => {
     if (res.success) {
       let obj = res.result
       Object.assign(myFormData, { ...obj })
@@ -166,7 +166,7 @@ const handleSubmit = async () => {
   if (await fieldCheck(myFormData)) {
     return
   }
-  let url = dataId.value?'/smartcity/airagKnowledgeTree/edit':'/smartcity/airagKnowledgeTree/add';
+  let url = dataId.value?'/airag/airagKnowledgeTree/edit':'/airag/airagKnowledgeTree/add';
   form.value
     .validate()
     .then(({ valid, errors }) => {

@@ -18,7 +18,7 @@ enum Api {
   knowledgeEmbeddingHitTest = '/airag/knowledge/embedding/hitTest',
   knowledgeDocDownload = '/airag/knowledge/doc/download',
   //知识库目录树
-  knowledgeTree = '/smartcity/airagKnowledgeTree/tree',
+  knowledgeTree = '/airag/airagKnowledgeTree/tree',
 }
 
 /**

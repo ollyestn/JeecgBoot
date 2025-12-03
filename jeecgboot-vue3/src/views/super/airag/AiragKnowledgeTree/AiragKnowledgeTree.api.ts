@@ -4,14 +4,14 @@ import { useMessage } from "/@/hooks/web/useMessage";
 const { createConfirm } = useMessage();
 
 enum Api {
-  list = '/smartcity/airagKnowledgeTree/list',
-  save='/smartcity/airagKnowledgeTree/add',
-  edit='/smartcity/airagKnowledgeTree/edit',
-  deleteOne = '/smartcity/airagKnowledgeTree/delete',
-  deleteBatch = '/smartcity/airagKnowledgeTree/deleteBatch',
-  importExcel = '/smartcity/airagKnowledgeTree/importExcel',
-  exportXls = '/smartcity/airagKnowledgeTree/exportXls',
-  tree = '/smartcity/airagKnowledgeTree/tree',
+  list = '/airag/airagKnowledgeTree/list',
+  save='/airag/airagKnowledgeTree/add',
+  edit='/airag/airagKnowledgeTree/edit',
+  deleteOne = '/airag/airagKnowledgeTree/delete',
+  deleteBatch = '/airag/airagKnowledgeTree/deleteBatch',
+  importExcel = '/airag/airagKnowledgeTree/importExcel',
+  exportXls = '/airag/airagKnowledgeTree/exportXls',
+  tree = '/airag/airagKnowledgeTree/tree',
 }
 /**
  * 导出api

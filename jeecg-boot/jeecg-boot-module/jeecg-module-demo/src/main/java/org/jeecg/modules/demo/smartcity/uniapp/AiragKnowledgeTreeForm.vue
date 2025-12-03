@@ -63,9 +63,9 @@
                 model: {},
                 backRouteName:'index',
                 url: {
-                  queryById: "/smartcity/airagKnowledgeTree/queryById",
-                  add: "/smartcity/airagKnowledgeTree/add",
-                  edit: "/smartcity/airagKnowledgeTree/edit",
+                  queryById: "/airag/airagKnowledgeTree/queryById",
+                  add: "/airag/airagKnowledgeTree/add",
+                  edit: "/airag/airagKnowledgeTree/edit",
                 },
             }
         },

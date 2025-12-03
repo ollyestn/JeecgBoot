@@ -32,7 +32,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  */
 @Tag(name="知识库目录")
 @RestController
-@RequestMapping("/smartcity/airagKnowledgeTree")
+@RequestMapping("/airag/airagKnowledgeTree")
 @Slf4j
 public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledgeTree, IAiragKnowledgeTreeService> {
 	@Autowired
@@ -70,7 +70,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
 	 */
 	@AutoLog(value = "知识库目录-添加")
 	@Operation(summary="知识库目录-添加")
-	@RequiresPermissions("smartcity:airag_knowledge_tree:add")
+	@RequiresPermissions("airag:airag_knowledge_tree:add")
 	@PostMapping(value = "/add")
 	public Result<String> add(@RequestBody AiragKnowledgeTree airagKnowledgeTree) {
 		airagKnowledgeTreeService.save(airagKnowledgeTree);
@@ -86,7 +86,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
 	 */
 	@AutoLog(value = "知识库目录-编辑")
 	@Operation(summary="知识库目录-编辑")
-	@RequiresPermissions("smartcity:airag_knowledge_tree:edit")
+	@RequiresPermissions("airag:airag_knowledge_tree:edit")
 	@RequestMapping(value = "/edit", method = {RequestMethod.PUT,RequestMethod.POST})
 	public Result<String> edit(@RequestBody AiragKnowledgeTree airagKnowledgeTree) {
 		airagKnowledgeTreeService.updateById(airagKnowledgeTree);
@@ -101,7 +101,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
 	 */
 	@AutoLog(value = "知识库目录-通过id删除")
 	@Operation(summary="知识库目录-通过id删除")
-	@RequiresPermissions("smartcity:airag_knowledge_tree:delete")
+	@RequiresPermissions("airag:airag_knowledge_tree:delete")
 	@DeleteMapping(value = "/delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
 		airagKnowledgeTreeService.removeById(id);
@@ -116,7 +116,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
 	 */
 	@AutoLog(value = "知识库目录-批量删除")
 	@Operation(summary="知识库目录-批量删除")
-	@RequiresPermissions("smartcity:airag_knowledge_tree:deleteBatch")
+	@RequiresPermissions("airag:airag_knowledge_tree:deleteBatch")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<String> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.airagKnowledgeTreeService.removeByIds(Arrays.asList(ids.split(",")));
@@ -146,7 +146,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
     * @param request
     * @param airagKnowledgeTree
     */
-    @RequiresPermissions("smartcity:airag_knowledge_tree:exportXls")
+    @RequiresPermissions("airag:airag_knowledge_tree:exportXls")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, AiragKnowledgeTree airagKnowledgeTree) {
         return super.exportXls(request, airagKnowledgeTree, AiragKnowledgeTree.class, "知识库目录");
@@ -159,7 +159,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
     * @param response
     * @return
     */
-    @RequiresPermissions("smartcity:airag_knowledge_tree:importExcel")
+    @RequiresPermissions("airag:airag_knowledge_tree:importExcel")
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, AiragKnowledgeTree.class);
@@ -171,6 +171,7 @@ public class AiragKnowledgeTreeController extends JeecgController<AiragKnowledge
      * @param knowledgeId 知识库ID
      * @return
      */
+    @RequiresPermissions("airag:airag_knowledge_tree:tree")
     @Operation(summary="根据知识库ID获取目录树结构")
     @GetMapping(value = "/tree")
     public Result<List<AiragKnowledgeTree>> queryTreeByKnowledgeId(@RequestParam(name="knowledgeId",required=true) String knowledgeId) {

@@ -60,7 +60,7 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useModal } from '/@/components/Modal';
   import { getTree } from './AiragKnowledgeTree.api';
-  import { knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from '../../super/airag/aiknowledge/AiKnowledgeBase.api';
+  import { knowledgeDocList, knowledgeRebuildDoc, knowledgeDeleteBatchDoc } from '../aiknowledge/AiKnowledgeBase.api';
   import AiragKnowledgeTreeModal from './components/AiragKnowledgeTreeModal.vue';
   import AiragKnowledgeDocModal from './components/AiragKnowledgeDocModal.vue';
   import Icon from '@/components/Icon';

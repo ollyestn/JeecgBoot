@@ -1,14 +1,17 @@
 package org.jeecg.modules.airag.llm.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.AssertUtils;
 import org.jeecg.common.util.TokenUtils;
+import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.mybatis.MybatisPlusSaasConfig;
 import org.jeecg.modules.airag.common.vo.knowledge.KnowledgeSearchResult;
 import org.jeecg.modules.airag.llm.consts.LLMConsts;
@@ -25,6 +28,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

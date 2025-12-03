@@ -8,6 +8,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeService;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.jeecg.modules.demo.smartcity.entity.SalesTraining;
 import org.jeecg.modules.demo.smartcity.service.ISalesTrainingService;
 
@@ -44,6 +45,9 @@ public class SalesTrainingController extends JeecgController<SalesTraining, ISal
 
      @Autowired
      private IAiragKnowledgeService airagKnowledgeService;
+
+     @Autowired
+     private IAiragKnowledgeTreeService airagKnowledgeTreeService;
 
 	/**
 	 * 分页列表查询
@@ -83,7 +87,7 @@ public class SalesTrainingController extends JeecgController<SalesTraining, ISal
 		salesTrainingService.save(salesTraining);
 
         // 培训教案加入知识库
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(salesTraining.getFiles(), "培训统计");
 
 		return Result.OK("添加成功！");
@@ -103,7 +107,7 @@ public class SalesTrainingController extends JeecgController<SalesTraining, ISal
 		salesTrainingService.updateById(salesTraining);
 
         // 培训教案加入知识库
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(salesTraining.getFiles(), "培训统计");
 
 		return Result.OK("编辑成功!");

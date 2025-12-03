@@ -8,6 +8,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeService;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.jeecg.modules.demo.smartcity.entity.ExternalReception;
 import org.jeecg.modules.demo.smartcity.service.IExternalReceptionService;
 
@@ -44,6 +45,9 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 
      @Autowired
      private IAiragKnowledgeService airagKnowledgeService;
+
+     @Autowired
+     private IAiragKnowledgeTreeService airagKnowledgeTreeService;
 
 	/**
 	 * 分页列表查询
@@ -82,7 +86,7 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	public Result<String> add(@RequestBody ExternalReception externalReception) {
 		externalReceptionService.save(externalReception);
 
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待统计");
 
 		return Result.OK("添加成功！");
@@ -101,7 +105,7 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 	public Result<String> edit(@RequestBody ExternalReception externalReception) {
 		externalReceptionService.updateById(externalReception);
 
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待统计");
 
 		return Result.OK("编辑成功!");

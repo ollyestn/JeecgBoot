@@ -8,6 +8,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeService;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.jeecg.modules.demo.smartcity.entity.TenderStatistics;
 import org.jeecg.modules.demo.smartcity.service.ITenderStatisticsService;
 
@@ -44,6 +45,9 @@ public class TenderStatisticsController extends JeecgController<TenderStatistics
 
      @Autowired
      private IAiragKnowledgeService airagKnowledgeService;
+
+     @Autowired
+     private IAiragKnowledgeTreeService airagKnowledgeTreeService;
      /**
 	 * 分页列表查询
 	 *
@@ -82,7 +86,7 @@ public class TenderStatisticsController extends JeecgController<TenderStatistics
 		tenderStatisticsService.save(tenderStatistics);
 
         // 投标复盘反馈
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(tenderStatistics.getFiles(), "投标统计");
 
 		return Result.OK("添加成功！");
@@ -102,7 +106,7 @@ public class TenderStatisticsController extends JeecgController<TenderStatistics
 		tenderStatisticsService.updateById(tenderStatistics);
 
         // 投标复盘反馈
-        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService);
+        AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
         airagUtils.AddFiles(tenderStatistics.getFiles(), "投标统计");
 
 		return Result.OK("编辑成功!");

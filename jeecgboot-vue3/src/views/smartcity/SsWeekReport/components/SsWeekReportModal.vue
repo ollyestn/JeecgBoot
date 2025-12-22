@@ -1,10 +1,13 @@
 ﻿
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" destroyOnClose :title="title" :maxHeight="500" :width="800" @ok="handleSubmit">
-    <BasicForm @register="registerForm" ref="formRef" name="SsWeekReportForm"/>
-    <!-- 子表单区域 -->
-    <a-tabs v-model:activeKey="activeKey" animated @change="handleChangeTabs" class="jeecg-tab">
-      <a-tab-pane tab="本周总结" key="ssWeeklySummary" :forceRender="true">
+  <BasicModal v-bind="$attrs" @register="registerModal" destroyOnClose :title="title" :maxHeight="500" :width="1200" @ok="handleSubmit">
+    <BasicForm @register="registerForm" ref="formRef" name="SsWeekReportForm" />
+    
+    <!-- 展平的子表单区域 -->
+    <div class="flattened-form-container">
+      <!-- 本周总结 -->
+      <div class="form-section">
+        <div class="section-title">本周总结</div>
         <JVxeTable
           keep-source
           resizable
@@ -17,13 +20,19 @@
           :rowSelection="true"
           :disabled="formDisabled"
           :toolbar="true"
-          />
-      </a-tab-pane>
-      <a-tab-pane tab="本周工作记录" key="ssWeeklyRecord" :forceRender="true">
+          :stripe="true"
+        />
+      </div>
+      
+      <!-- 本周工作记录 -->
+      <div class="form-section">
+        <div class="section-title">本周工作记录</div>
         <SsWeeklyRecordForm ref="ssWeeklyRecordForm" :disabled="formDisabled"></SsWeeklyRecordForm>
-      </a-tab-pane>
-
-      <a-tab-pane tab="下周工作计划" key="ssWorklyPlan" :forceRender="true">
+      </div>
+      
+      <!-- 下周工作计划 -->
+      <div class="form-section">
+        <div class="section-title">下周工作计划</div>
         <JVxeTable
           keep-source
           resizable
@@ -36,9 +45,10 @@
           :rowSelection="true"
           :disabled="formDisabled"
           :toolbar="true"
-          />
-      </a-tab-pane>
-    </a-tabs>
+          :stripe="true"
+        />
+      </div>
+    </div>
   </BasicModal>
 </template>
 
@@ -66,8 +76,6 @@
     const emit = defineEmits(['register','success']);
     const isUpdate = ref(true);
     const formDisabled = ref(false);
-    const refKeys = ref(['ssWeeklySummary', 'ssWeeklyRecord', 'ssWorklyPlan', ]);
-    const activeKey = ref('ssWeeklySummary');
     const ssWeeklySummary = ref();
     const ssWeeklyRecordForm = ref();
     const ssWorklyPlan = ref();
@@ -112,14 +120,13 @@
        setProps({ disabled: !data?.showFooter })
     });
     //方法配置
-    const [handleChangeTabs,handleSubmit,requestSubTableData,formRef] = useJvxeMethod(requestAddOrEdit,classifyIntoFormData,tableRefs,activeKey,refKeys,validateSubForm);
+    const [,handleSubmit,requestSubTableData,formRef] = useJvxeMethod(requestAddOrEdit,classifyIntoFormData,tableRefs,null,null,validateSubForm);
 
     //设置标题
     const title = computed(() => (!unref(isUpdate) ? '新增' : !unref(formDisabled) ? '编辑' : '详情'));
 
     async function reset(){
       await resetFields();
-      activeKey.value = 'ssWeeklySummary';
       ssWeeklySummaryTable.dataSource = [];
       ssWeeklyRecordForm.value.resetFields();
       ssWorklyPlanTable.dataSource = [];
@@ -142,8 +149,6 @@
                  resolve(allValues)
              }).catch(e => {
                  if (e.error === VALIDATE_FAILED) {
-                     // 如果有未通过表单验证的子表，就自动跳转到它所在的tab
-                     activeKey.value = e.index == null ? unref(activeKey) : refKeys.value[e.index]
                      if (e.errorFields) {
                        const firstField = e.errorFields[0];
                        if (firstField) {
@@ -216,7 +221,19 @@
     width: 100%;
   }
   
-  .jeecg-tab {
-    padding: 0 20px;
+  .flattened-form-container {
+    margin-top: 20px;
+    
+    .form-section {
+      margin-bottom: 30px;
+      
+      .section-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-left: 10px;
+        border-left: 4px solid #1890ff;
+      }
+    }
   }
 </style>

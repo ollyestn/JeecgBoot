@@ -1,9 +1,12 @@
 <template>
   <div>
     <BasicForm @register="registerForm" ref="formRef"/>
-    <!-- 子表单区域 -->
-    <a-tabs v-model:activeKey="activeKey" animated  @change="handleChangeTabs">
-      <a-tab-pane tab="本周总结" key="ssWeeklySummary" :forceRender="true">
+    
+    <!-- 展平的子表单区域 -->
+    <div class="flattened-form-container">
+      <!-- 本周总结 -->
+      <div class="form-section">
+        <div class="section-title">本周总结</div>
         <JVxeTable
           keep-source
           resizable
@@ -17,12 +20,19 @@
           :rowSelection="true"
           :disabled="formDisabled"
           :toolbar="true"
+          :stripe="true"
         />
-      </a-tab-pane>
-      <a-tab-pane tab="本周工作记录" key="ssWeeklyRecord" :forceRender="true">
+      </div>
+      
+      <!-- 本周工作记录 -->
+      <div class="form-section">
+        <div class="section-title">本周工作记录</div>
         <SsWeeklyRecordForm ref="ssWeeklyRecordForm" :disabled="formDisabled"></SsWeeklyRecordForm>
-      </a-tab-pane>
-      <a-tab-pane tab="下周工作计划" key="ssWorklyPlan" :forceRender="true">
+      </div>
+      
+      <!-- 下周工作计划 -->
+      <div class="form-section">
+        <div class="section-title">下周工作计划</div>
         <JVxeTable
           keep-source
           resizable
@@ -36,9 +46,10 @@
           :rowSelection="true"
           :disabled="formDisabled"
           :toolbar="true"
+          :stripe="true"
         />
-      </a-tab-pane>
-    </a-tabs>
+      </div>
+    </div>
 
     <div style="width: 100%;text-align: center" v-if="!formDisabled">
       <a-button @click="handleSubmit" pre-icon="ant-design:check" type="primary">提 交</a-button>
@@ -83,12 +94,9 @@
         return true;
       });
 
-      const refKeys = ref(['ssWeeklySummary', 'ssWeeklyRecord', 'ssWorklyPlan', ]);
-      const activeKey = ref('ssWeeklySummary');
       const ssWeeklySummary = ref();
       const ssWeeklyRecordForm = ref();
       const ssWorklyPlan = ref();
-      const tableRefs = {ssWeeklySummary, ssWorklyPlan, };
       const ssWeeklySummaryTable = reactive({
         loading: false,
         dataSource: [],
@@ -102,7 +110,7 @@
         show: false
       })
 
-      const [handleChangeTabs,handleSubmit,requestSubTableData,formRef] = useJvxeMethod(requestAddOrEdit,classifyIntoFormData,tableRefs,activeKey,refKeys,validateSubForm);
+      const [,handleSubmit,requestSubTableData,formRef] = useJvxeMethod(requestAddOrEdit,classifyIntoFormData,null,null,null,validateSubForm);
 
       function classifyIntoFormData(allValues) {
         let main = Object.assign({}, allValues.formValue)
@@ -160,8 +168,6 @@
         formDisabled,
         formRef,
         handleSubmit,
-        activeKey,
-        handleChangeTabs,
         ssWeeklySummary,
         ssWeeklyRecordForm,
         ssWorklyPlan,
@@ -171,3 +177,21 @@
     }
   });
 </script>
+
+<style lang="less" scoped>
+.flattened-form-container {
+  margin-top: 20px;
+  
+  .form-section {
+    margin-bottom: 30px;
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-left: 10px;
+      border-left: 4px solid #1890ff;
+    }
+  }
+}
+</style>

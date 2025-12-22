@@ -83,7 +83,29 @@ export const ssWeeklyRecordFormSchema: FormSchema[] = [
   {
     label: '工作内容记录',
     field: 'workContent',
-    component: 'Input',
+    component: 'InputTextArea',
+    componentProps: {
+      rows: 6,
+      placeholder: '请输入工作内容记录'
+    },
+    colProps: { span: 24 },
+  },
+  {
+    label: 'AI转写结果',
+    field: 'aiResult',
+    component: 'InputTextArea',
+    componentProps: {
+      rows: 8,
+      placeholder: 'AI转写结果将显示在这里'
+    },
+    colProps: { span: 24 },
+  },
+  {
+    field: 'aiTranslateButton',
+    component: 'Button',
+    label: ' ',
+    slot: 'aiTranslateButton',
+    colProps: { span: 24 },
   },
 	{
 	  label: '',
@@ -98,7 +120,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
       title: '本周完成主要工作',
       key: 'completeTask',
       type: JVxeTypes.input,
-      width:"200px",
+      width:"456px",
       placeholder: '请输入${title}',
       defaultValue:'',
     },
@@ -106,7 +128,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
       title: '问题、意见反馈',
       key: 'questionFeedback',
       type: JVxeTypes.input,
-      width:"200px",
+      width:"320px",
       placeholder: '请输入${title}',
       defaultValue:'',
     },
@@ -114,7 +136,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
       title: '建议及解决方案',
       key: 'suggestionSolutions',
       type: JVxeTypes.input,
-      width:"200px",
+      width:"300px",
       placeholder: '请输入${title}',
       defaultValue:'',
     },
@@ -142,7 +164,7 @@ export const ssWorklyPlanColumns: JVxeColumn[] = [
       title: '工作计划内容',
       key: 'workPlanContent',
       type: JVxeTypes.input,
-      width:"200px",
+      width:"676px",
       placeholder: '请输入${title}',
       defaultValue:'',
     },

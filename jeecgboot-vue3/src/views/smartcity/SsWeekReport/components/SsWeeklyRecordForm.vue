@@ -1,12 +1,17 @@
 <template>
-    <BasicForm @register="registerForm" name="SsWeeklyRecordForm" class="basic-modal-form"/>
+    <BasicForm @register="registerForm" name="SsWeeklyRecordForm" class="basic-modal-form">
+      <template #aiTranslateButton="{ model, field }">
+        <a-button type="primary" @click="handleAiTranslate(model)" :loading="aiLoading">AI转写</a-button>
+      </template>
+    </BasicForm>
 </template>
 <script lang="ts">
-    import {defineComponent} from 'vue';
+    import {defineComponent, ref} from 'vue';
     import {BasicForm, useForm} from '/@/components/Form/index';
     import {ssWeeklyRecordFormSchema} from '../SsWeekReport.data';
     import {defHttp} from '/@/utils/http/axios';
-    import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils'
+    import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils';
+    import { useMessage } from '/@/hooks/web/useMessage';
 
     export default defineComponent({
         name:"SsWeeklyRecordForm",
@@ -19,6 +24,8 @@
             }
         },
         setup(props,{emit}) {
+            const { createMessage } = useMessage();
+            const aiLoading = ref(false);
             const [registerForm, { setProps, resetFields, setFieldsValue, getFieldsValue, validate, scrollToField }] = useForm({
                 labelWidth: 150,
                 schemas: ssWeeklyRecordFormSchema,
@@ -49,6 +56,39 @@
                return [formData];
             }
             /**
+            *AI转写功能
+            */
+            async function handleAiTranslate(model) {
+                const workContent = model.workContent;
+                if (!workContent) {
+                    createMessage.warning('请先输入工作内容记录');
+                    return;
+                }
+                
+                try {
+                    aiLoading.value = true;
+                    // 调用后端AI转写接口
+                    const result = await defHttp.post({
+                        url: '/smartcity/ssWeekReport/aiTranslate',
+                        params: { content: workContent }
+                    }, { isTransformResponse: false });
+                    
+                    if (result.success) {
+                        // 将结果设置到AI转写结果字段
+                        setFieldsValue({ aiResult: result.result });
+                        createMessage.success('AI转写成功');
+                    } else {
+                        createMessage.error(result.message || 'AI转写失败');
+                    }
+                } catch (error) {
+                    console.error('AI转写错误:', error);
+                    createMessage.error('AI转写请求失败');
+                } finally {
+                    aiLoading.value = false;
+                }
+            }
+            
+            /**
             *表单校验
             */
             function validateForm(index){
@@ -66,7 +106,9 @@
                 resetFields,
                 initFormData,
                 getFormData,
-                validateForm
+                validateForm,
+                aiLoading,
+                handleAiTranslate
             }
         }
     })
@@ -74,6 +116,6 @@
 <style lang="less" scoped>
   .basic-modal-form {
     overflow: auto;
-    height: 340px;
+    height: 500px;
   }
 </style>

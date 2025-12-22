@@ -14,6 +14,7 @@ enum Api {
   ssWeeklySummaryList = '/smartcity/ssWeekReport/querySsWeeklySummaryByMainId',
   ssWeeklyRecordList = '/smartcity/ssWeekReport/querySsWeeklyRecordByMainId',
   ssWorklyPlanList = '/smartcity/ssWeekReport/querySsWorklyPlanByMainId',
+  aiTranslate = '/smartcity/ssWeekReport/aiTranslate',
 }
 /**
  * 导出api
@@ -80,4 +81,12 @@ export const batchDelete = (params, handleSuccess) => {
 export const saveOrUpdate = (params, isUpdate) => {
   let url = isUpdate ? Api.edit : Api.save;
   return defHttp.post({url: url, params});
+}
+
+/**
+ * AI转写接口
+ * @param params 
+ */
+export const aiTranslate = (params) => {
+  return defHttp.post({url: Api.aiTranslate, params});
 }

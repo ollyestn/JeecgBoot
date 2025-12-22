@@ -50,6 +50,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import com.alibaba.fastjson.JSONObject;
+
 
  /**
  * @Description: 周报
@@ -70,6 +77,47 @@ public class SsWeekReportController {
 	private ISsWeeklyRecordService ssWeeklyRecordService;
 	@Autowired
 	private ISsWorklyPlanService ssWorklyPlanService;
+	
+	/**
+	 * AI转写接口
+	 *
+	 * @param content
+	 * @return
+	 */
+	@AutoLog(value = "周报-AI转写")
+	@Operation(summary="周报-AI转写")
+	@PostMapping(value = "/aiTranslate")
+	public Result<String> aiTranslate(@RequestParam(name="content",required=true) String content) {
+		try {
+			// Ollama服务地址
+			String ollamaUrl = "http://172.16.0.176:6868/api/generate";
+			
+			// 构造请求参数
+			JSONObject requestBody = new JSONObject();
+			requestBody.put("model", "qwen2");
+			requestBody.put("prompt", "请将以下工作内容转换为格式化的周报内容，每件事一行，格式如：1）星期一，12月1日，拜访内蒙古医院姚主任。\n\n" + content);
+			requestBody.put("stream", false);
+			
+			// 发送请求到Ollama
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<String> request = new HttpEntity<>(requestBody.toJSONString(), headers);
+			
+			ResponseEntity<String> response = restTemplate.postForEntity(ollamaUrl, request, String.class);
+			
+			if (response.getStatusCode().is2xxSuccessful()) {
+				JSONObject jsonResponse = JSONObject.parseObject(response.getBody());
+				String result = jsonResponse.getString("response");
+				return Result.OK(result);
+			} else {
+				return Result.error("AI转写服务调用失败");
+			}
+		} catch (Exception e) {
+			log.error("AI转写异常：", e);
+			return Result.error("AI转写异常：" + e.getMessage());
+		}
+	}
 	
 	/**
 	 * 分页列表查询

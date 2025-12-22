@@ -1,7 +1,9 @@
 <template>
   <div class="p-4">
+    <!--
     <ChartGroupCard class="enter-y" :loading="loading" type="chart" />
     <SaleTabCard class="!my-4 enter-y" :loading="loading" />
+    -->
     <a-row>
       <a-col :span="24">
         <a-card :loading="loading" :bordered="false" title="最近一周访问量统计">

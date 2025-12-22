@@ -7,9 +7,11 @@
     首页主题：
     <a-radio-group v-model:value="indexStyle">
       <a-radio :value="0">默认</a-radio>
+      <!--
       <a-radio :value="1">销量统计</a-radio>
       <a-radio :value="2">业务统计</a-radio>
       <a-radio :value="3">我的任务</a-radio>
+      -->
     </a-radio-group>
   </div>
 </template>

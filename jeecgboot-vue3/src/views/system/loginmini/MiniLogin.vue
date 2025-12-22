@@ -231,7 +231,7 @@
   //手机登录表单字段
   const phoneFormData = reactive<any>({
     mobile: '',
-    smscode: '',
+    smscode: '123456',
     loginOrgCode: '',
   });
   const loginRef = ref();

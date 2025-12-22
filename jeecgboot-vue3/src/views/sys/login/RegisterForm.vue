@@ -61,7 +61,7 @@
     account: '',
     password: '',
     confirmPassword: '',
-    mobile: '111',
+    mobile: '139',
     sms: '123456',
     policy: false,
   });

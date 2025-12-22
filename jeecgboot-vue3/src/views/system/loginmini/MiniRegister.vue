@@ -106,7 +106,7 @@
   const formData = reactive<any>({
     username: '',
     mobile: '',
-    smscode: '',
+    smscode: '123456',
     password: '',
     confirmPassword: '',
     policy: false,
@@ -235,7 +235,7 @@
    * 初始化表单
    */
   function initForm() {
-    Object.assign(formData,{username:'',mobile: '', smscode: '', password: '', confirmPassword: '', policy: false})
+    Object.assign(formData,{username:'',mobile: '', smscode: '123456', password: '', confirmPassword: '', policy: false})
     if(!unref(timer)){
       showInterval.value = true;
       clearInterval(unref(timer));

@@ -61,8 +61,8 @@
     account: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
-    sms: '',
+    mobile: '111',
+    sms: '123456',
     policy: false,
   });
   const { getFormRules } = useFormRules(formData);

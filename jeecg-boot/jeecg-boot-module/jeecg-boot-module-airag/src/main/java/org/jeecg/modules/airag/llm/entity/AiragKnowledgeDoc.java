@@ -86,6 +86,13 @@ public class AiragKnowledgeDoc implements Serializable {
     private String knowledgeId;
 
     /**
+     * 目录树节点id
+     */
+    //@Excel(name = "目录树节点", width = 15)
+    @Schema(description = "目录树节点id")
+    private String nodeId;
+
+    /**
      * 标题
      */
     @Excel(name = "标题", width = 15)

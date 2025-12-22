@@ -36,7 +36,7 @@
     obj: {
       username: '',
       phone: '',
-      smscode: '',
+      smscode: '123456',
     },
   });
   /**

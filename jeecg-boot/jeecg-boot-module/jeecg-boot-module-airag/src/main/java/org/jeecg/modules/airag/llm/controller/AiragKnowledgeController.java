@@ -1,14 +1,17 @@
 package org.jeecg.modules.airag.llm.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.AssertUtils;
 import org.jeecg.common.util.TokenUtils;
+import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.mybatis.MybatisPlusSaasConfig;
 import org.jeecg.modules.airag.common.vo.knowledge.KnowledgeSearchResult;
 import org.jeecg.modules.airag.llm.consts.LLMConsts;
@@ -17,12 +20,17 @@ import org.jeecg.modules.airag.llm.entity.AiragKnowledgeDoc;
 import org.jeecg.modules.airag.llm.handler.EmbeddingHandler;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeDocService;
 import org.jeecg.modules.airag.llm.service.IAiragKnowledgeService;
+import org.jeecg.modules.airag.llm.entity.AiragKnowledgeTree;
+import org.jeecg.modules.airag.llm.service.IAiragKnowledgeTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +55,9 @@ public class AiragKnowledgeController {
 
     @Autowired
     EmbeddingHandler embeddingHandler;
+
+    @Autowired
+    private IAiragKnowledgeTreeService airagKnowledgeTreeService;
 
     /**
      * 分页列表查询知识库
@@ -81,6 +92,12 @@ public class AiragKnowledgeController {
     public Result<String> add(@RequestBody AiragKnowledge airagKnowledge) {
         airagKnowledge.setStatus(LLMConsts.STATUS_ENABLE);
         airagKnowledgeService.save(airagKnowledge);
+        AiragKnowledgeTree airagKnowledgeTree = new  AiragKnowledgeTree();
+        airagKnowledgeTree.setKnowledgeId(airagKnowledge.getId());
+        airagKnowledgeTree.setName(airagKnowledge.getName());
+        airagKnowledgeTree.setLevel(1);
+        airagKnowledgeTree.setPid("0");
+        airagKnowledgeTreeService.save(airagKnowledgeTree);
         return Result.OK("添加成功！");
     }
 
@@ -106,6 +123,10 @@ public class AiragKnowledgeController {
             // 更新了模型,重建文档
             airagKnowledgeDocService.rebuildDocumentByKnowId(airagKnowledge.getId());
         }
+
+        //同步更新知识库树目录
+        //airagKnowledgeTreeService.update();
+
         return Result.OK("编辑成功!");
     }
 
@@ -152,6 +173,10 @@ public class AiragKnowledgeController {
         //update-end---author:chenrui ---date:20250606  for：[issues/8337]关于ai工作列表的数据权限问题 #8337------------
         airagKnowledgeDocService.removeByKnowIds(Collections.singletonList(id));
         airagKnowledgeService.removeById(id);
+
+        // 同步删除知识库目录
+        airagKnowledgeTreeService.remove(new QueryWrapper<AiragKnowledgeTree>().eq("knowledge_id", id));
+
         return Result.OK("删除成功!");
     }
 
@@ -219,8 +244,9 @@ public class AiragKnowledgeController {
     @PostMapping(value = "/doc/import/zip")
     @RequiresPermissions("airag:knowledge:doc:zip")
     public Result<?> importDocumentFromZip(@RequestParam(name = "knowId", required = true) String knowId,
+                                           @RequestParam(name = "nodeId", required = true) String nodeId,
                                            @RequestParam(name = "file", required = true) MultipartFile file) {
-        return airagKnowledgeDocService.importDocumentFromZip(knowId,file);
+        return airagKnowledgeDocService.importDocumentFromZip(knowId,nodeId,file);
     }
 
     /**
@@ -358,4 +384,76 @@ public class AiragKnowledgeController {
         return Result.OK(airagKnowledges);
     }
 
+    /**
+     * 下载知识库文档
+     *
+     * @param docId 文档id
+     * @return
+     * @author jeecg-boot
+     * @date 2025/12/2
+     */
+    @GetMapping(value = "/doc/download/{docId}")
+    public void downloadDocument(@PathVariable("docId") String docId, HttpServletResponse response) {
+        try {
+            AiragKnowledgeDoc doc = airagKnowledgeDocService.getById(docId);
+            if (doc == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 获取文件路径
+            String metadataStr = doc.getMetadata();
+            if (oConvertUtils.isEmpty(metadataStr)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            JSONObject metadata = JSONObject.parseObject(metadataStr);
+            String filePath = metadata.getString(LLMConsts.KNOWLEDGE_DOC_METADATA_FILEPATH);
+            if (oConvertUtils.isEmpty(filePath)) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 处理网络资源路径
+            filePath = embeddingHandler.ensureFile(filePath);
+
+            File file = new File(filePath);
+            if (!file.exists()) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            // 设置响应头
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment;filename=" + 
+                URLEncoder.encode(doc.getTitle() + getFileExtension(file.getName()), "UTF-8"));
+
+            // 输出文件内容
+            try (InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+                 OutputStream outputStream = response.getOutputStream()) {
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = inputStream.read(buf)) != -1) {
+                    outputStream.write(buf, 0, len);
+                }
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            log.error("下载文档失败: " + e.getMessage(), e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 获取文件扩展名
+     * @param fileName
+     * @return
+     */
+    private String getFileExtension(String fileName) {
+        if (fileName == null || fileName.lastIndexOf(".") == -1) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
 }

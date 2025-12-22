@@ -590,7 +590,7 @@ public class EmbeddingHandler implements IEmbeddingHandler {
      * @date 2025/4/1 17:36
      */
     @NotNull
-    private String ensureFile(String filePath) {
+    public String ensureFile(String filePath) {
         // 网络资源,先下载到临时目录
         Matcher matcher = LLMConsts.WEB_PATTERN.matcher(filePath);
         if (matcher.matches()) {

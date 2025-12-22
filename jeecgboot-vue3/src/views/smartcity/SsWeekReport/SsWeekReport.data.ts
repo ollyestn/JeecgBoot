@@ -85,26 +85,9 @@ export const ssWeeklyRecordFormSchema: FormSchema[] = [
     field: 'workContent',
     component: 'InputTextArea',
     componentProps: {
-      rows: 6,
+      rows: 12,
       placeholder: '请输入工作内容记录'
     },
-    colProps: { span: 24 },
-  },
-  {
-    label: 'AI转写结果',
-    field: 'aiResult',
-    component: 'InputTextArea',
-    componentProps: {
-      rows: 8,
-      placeholder: 'AI转写结果将显示在这里'
-    },
-    colProps: { span: 24 },
-  },
-  {
-    field: 'aiTranslateButton',
-    component: 'Button',
-    label: ' ',
-    slot: 'aiTranslateButton',
     colProps: { span: 24 },
   },
 	{
@@ -113,6 +96,13 @@ export const ssWeeklyRecordFormSchema: FormSchema[] = [
 	  component: 'Input',
 	  show: false
 	},
+  {
+      field: 'aiTranslateButton',
+      component: 'Input',
+      label: ' ',
+      slot: 'aiTranslateButton',
+      colProps: { span: 24 },
+  },
 ];
 //子表表格配置
 export const ssWeeklySummaryColumns: JVxeColumn[] = [

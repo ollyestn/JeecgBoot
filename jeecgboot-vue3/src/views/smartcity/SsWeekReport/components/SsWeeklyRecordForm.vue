@@ -4,6 +4,24 @@
         <a-button type="primary" @click="handleAiTranslate(model)" :loading="aiLoading">AI转写</a-button>
       </template>
     </BasicForm>
+    
+    <!-- AI转写结果对话框 -->
+    <BasicModal
+      v-bind="$attrs"
+      @register="registerAiResultModal"
+      title="AI转写结果"
+      :width="600"
+      @ok="handleApplyAiResult"
+      @cancel="handleCloseAiResult"
+    >
+     <!--
+      <a-textarea
+        v-model:value="aiResultContent"
+        :rows="10"
+        placeholder="AI转写结果将显示在这里"
+      />
+      -->
+    </BasicModal>
 </template>
 <script lang="ts">
     import {defineComponent, ref} from 'vue';
@@ -12,6 +30,7 @@
     import {defHttp} from '/@/utils/http/axios';
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils';
     import { useMessage } from '/@/hooks/web/useMessage';
+    import { BasicModal, useModal } from '/@/components/Modal';
 
     export default defineComponent({
         name:"SsWeeklyRecordForm",
@@ -26,12 +45,15 @@
         setup(props,{emit}) {
             const { createMessage } = useMessage();
             const aiLoading = ref(false);
+            const aiResultContent = ref('');
+            const currentModel = ref({});
             const [registerForm, { setProps, resetFields, setFieldsValue, getFieldsValue, validate, scrollToField }] = useForm({
                 labelWidth: 150,
                 schemas: ssWeeklyRecordFormSchema,
                 showActionButtonGroup: false,
                 baseColProps: {span: 24}
             });
+            const [registerAiResultModal, { openModal: openAiResultModal, closeModal: closeAiResultModal }] = useModal();
             /**
             *初始化加载数据
             */
@@ -67,6 +89,8 @@
                 
                 try {
                     aiLoading.value = true;
+                    // 保存当前模型引用
+                    currentModel.value = model;
                     // 调用后端AI转写接口
                     const result = await defHttp.post({
                         url: '/smartcity/ssWeekReport/aiTranslate',
@@ -74,9 +98,9 @@
                     }, { isTransformResponse: false });
                     
                     if (result.success) {
-                        // 将结果设置到AI转写结果字段
-                        setFieldsValue({ aiResult: result.result });
-                        createMessage.success('AI转写成功');
+                        // 设置AI转写结果并打开对话框
+                        aiResultContent.value = result.result;
+                        openAiResultModal(true, {});
                     } else {
                         createMessage.error(result.message || 'AI转写失败');
                     }
@@ -86,6 +110,23 @@
                 } finally {
                     aiLoading.value = false;
                 }
+            }
+            
+            /**
+            * 应用AI转写结果
+            */
+            function handleApplyAiResult() {
+                // 将AI转写结果应用到工作内容记录字段
+                setFieldsValue({ workContent: aiResultContent.value });
+                closeAiResultModal();
+                createMessage.success('已应用AI转写结果');
+            }
+            
+            /**
+            * 关闭AI转写结果对话框
+            */
+            function handleCloseAiResult() {
+                closeAiResultModal();
             }
             
             /**
@@ -108,7 +149,11 @@
                 getFormData,
                 validateForm,
                 aiLoading,
-                handleAiTranslate
+                handleAiTranslate,
+                registerAiResultModal,
+                aiResultContent,
+                handleApplyAiResult,
+                handleCloseAiResult
             }
         }
     })
@@ -116,6 +161,6 @@
 <style lang="less" scoped>
   .basic-modal-form {
     overflow: auto;
-    height: 500px;
+    height: 360px;
   }
 </style>

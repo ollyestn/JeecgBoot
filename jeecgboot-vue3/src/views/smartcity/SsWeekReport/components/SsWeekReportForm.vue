@@ -148,6 +148,7 @@
       async function initFormData(){
         let params = {id: props.formData.dataId};
         const data = await defHttp.get({url: queryByIdUrl, params});
+
         //设置表单的值
         await setFieldsValue({...data});
         requestSubTableData(ssWeeklySummaryList, {id: data.id}, ssWeeklySummaryTable, ()=>{

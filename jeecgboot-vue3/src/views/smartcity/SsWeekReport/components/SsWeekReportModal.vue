@@ -64,6 +64,8 @@
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils'
     import { useMessage } from '/@/hooks/web/useMessage';
     import { getDateByPicker } from '/@/utils';
+    //获取登录用户的信息
+    import { useUserStore } from '@/store/modules/user'
     //日期个性化选择
     const fieldPickers = reactive({
     });
@@ -107,6 +109,7 @@
         setModalProps({confirmLoading: false,showCancelBtn:data?.showFooter,showOkBtn:data?.showFooter});
         isUpdate.value = !!data?.isUpdate;
         formDisabled.value = !data?.showFooter;
+
         if (unref(isUpdate)) {
             //表单赋值
             await setFieldsValue({
@@ -115,6 +118,34 @@
              ssWeeklyRecordForm.value.initFormData(ssWeeklyRecordList,data?.record?.id)
              requestSubTableData(ssWeeklySummaryList, {id:data?.record?.id}, ssWeeklySummaryTable)
              requestSubTableData(ssWorklyPlanList, {id:data?.record?.id}, ssWorklyPlanTable)
+        }
+        else{
+          // 新增时自动获取值
+
+          //设置变量储存登陆人信息
+          const userStore = useUserStore();
+          const usercode = (userStore.getUserInfo.realname);
+
+          // 得到年月日
+          const today = new Date();
+          //打印当前日期
+          const thisDayDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+          /*
+            today是当前日期
+            date2是当年第一天
+            d是当前日期是今年第多少天
+            用d + 当前年的第一天的周差距的和在除以7就是本年第几周
+          */
+          var date2 = new Date(today.getFullYear(), 0, 1),
+              d = Math.round((today.valueOf() - date2.valueOf()) / 86400000);
+          const week = Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7)-1;
+
+          await setFieldsValue({
+                          name: usercode,
+                          day: thisDayDate,
+                          week: week
+                      });
         }
         // 隐藏底部时禁用整个表单
        setProps({ disabled: !data?.showFooter })

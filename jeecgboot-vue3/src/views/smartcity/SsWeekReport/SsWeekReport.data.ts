@@ -56,6 +56,7 @@ export const formSchema: FormSchema[] = [
     label: '姓名',
     field: 'name',
     component: 'Input',
+    show: false
   },
   {
     label: '日期',
@@ -109,7 +110,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
     {
       title: '本周完成主要工作',
       key: 'completeTask',
-      type: JVxeTypes.input,
+      type: JVxeTypes.textarea,
       width:"456px",
       placeholder: '请输入${title}',
       defaultValue:'',
@@ -117,7 +118,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
     {
       title: '问题、意见反馈',
       key: 'questionFeedback',
-      type: JVxeTypes.input,
+      type: JVxeTypes.textarea,
       width:"320px",
       placeholder: '请输入${title}',
       defaultValue:'',
@@ -125,7 +126,7 @@ export const ssWeeklySummaryColumns: JVxeColumn[] = [
     {
       title: '建议及解决方案',
       key: 'suggestionSolutions',
-      type: JVxeTypes.input,
+      type: JVxeTypes.textarea,
       width:"300px",
       placeholder: '请输入${title}',
       defaultValue:'',
@@ -142,19 +143,19 @@ export const ssWorklyPlanColumns: JVxeColumn[] = [
       placeholder: '请输入${title}',
       defaultValue:'',
     },
-    {
-      title: '日期',
-      key: 'workDay',
-      type: JVxeTypes.date,
-      width:"200px",
-      placeholder: '请输入${title}',
-      defaultValue:'',
-    },
+//    {
+//      title: '日期',
+//      key: 'workDay',
+//      type: JVxeTypes.date,
+//      width:"200px",
+//      placeholder: '请输入${title}',
+//      defaultValue:'',
+//    },
     {
       title: '工作计划内容',
       key: 'workPlanContent',
-      type: JVxeTypes.input,
-      width:"676px",
+      type: JVxeTypes.textarea,
+      width:"876px",
       placeholder: '请输入${title}',
       defaultValue:'',
     },
@@ -188,7 +189,7 @@ export const superQuerySchema = {
     view: 'table',
     fields: {
         weekDay: {title: '星期',order: 0,view: 'number', type: 'number',dictCode: 'week',},
-        workDay: {title: '日期',order: 1,view: 'date', type: 'string',},
+//        workDay: {title: '日期',order: 1,view: 'date', type: 'string',},
         workPlanContent: {title: '工作计划内容',order: 2,view: 'text', type: 'string',},
     }
   },

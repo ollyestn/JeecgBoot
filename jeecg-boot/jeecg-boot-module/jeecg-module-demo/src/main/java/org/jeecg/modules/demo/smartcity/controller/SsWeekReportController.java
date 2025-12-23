@@ -94,7 +94,7 @@ public class SsWeekReportController {
 			
 			// 构造请求参数
 			JSONObject requestBody = new JSONObject();
-			requestBody.put("model", "qwen2");
+			requestBody.put("model", "qwen3:8b");
 			requestBody.put("prompt", "请将以下工作内容转换为格式化的周报内容，每件事一行，格式如：1）星期一，12月1日，拜访内蒙古医院姚主任。\n\n" + content);
 			requestBody.put("stream", false);
 			
@@ -109,6 +109,25 @@ public class SsWeekReportController {
 			if (response.getStatusCode().is2xxSuccessful()) {
 				JSONObject jsonResponse = JSONObject.parseObject(response.getBody());
 				String result = jsonResponse.getString("response");
+				
+				// 处理AI返回结果，剔除不必要的段落内容
+				if (result != null) {
+					// 剔除以```开始和结束的内容块
+					//result = result.replaceAll("<think>.*?</think>", "");
+
+                    int thinkStart = result.indexOf("<think>");
+                    int thinkEnd = result.indexOf("</think>", thinkStart+1);
+                    if (thinkStart >= 0 && thinkEnd >= 0) {
+                        result =  result.substring(thinkEnd + 8);
+                    }
+
+					// 剔除可能存在的markdown链接格式内容
+					result = result.replaceAll("(?i)\\[.*?\\]\\(.*?\\)", "");
+					// 剔除多余的空白行和特殊字符
+					result = result.replaceAll("\n{3,}", "\n\n");
+					result = result.trim();
+				}
+				
 				return Result.OK(result);
 			} else {
 				return Result.error("AI转写服务调用失败");

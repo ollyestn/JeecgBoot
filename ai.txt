@@ -5,3 +5,20 @@
 
 3、在“本周工作记录”部分，去掉AI转写结果，将“AI转写”按钮，放到表格“工作内容记录”的上方，点击“AI转写”按钮，“将工作内容记录”字段的内容，提交到后端接口，提交内容为json数据，包括AI转写的提示词、工作内容记录，弹出一个新的form对话框，对话框中一个多行文本框，显示AI转写的结果。一个确定和取消的按钮，点击确定按钮，关闭对话框，并将ai转写的结果填写到工作内容记录字段；点击取消关闭对话框。
 
+4、在后端接口aiTranslate中，获取到ollama的返回结果后，从json结果中提取result字段值，剔除<think></think>段内容，剩下的内容为ai转写的内容，将其做为结果返回给前端。
+（这个ai做不到！）
+
+5、SsWeeklyRecordForm.vue中接口调用
+                    // 调用后端AI转写接口
+                    const result = await defHttp.post({
+                        url: '/smartcity/ssWeekReport/aiTranslate',
+                        params: { content: workContent }
+                    }, { isTransformResponse: false });
+                    与后端接口 
+                    @PostMapping(value = "/aiTranslate")
+	public Result<String> aiTranslate(@RequestParam(name="content",required=true) String content) {
+    }
+    不匹配，请修改后端接口形式。
+ （这个ai做不到！）
+ 
+6、    

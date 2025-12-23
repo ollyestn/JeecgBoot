@@ -87,11 +87,39 @@ public class SsWeekReportController {
 	@AutoLog(value = "周报-AI转写")
 	@Operation(summary="周报-AI转写")
 	@PostMapping(value = "/aiTranslate")
-	public Result<String> aiTranslate(@RequestParam(name="content",required=true) String content) {
+// 1.参数附在url后的形式：/aiTranslate?content="xxx"
+//	public Result<String> aiTranslate(@RequestParam(name="content", required = true) String content) {
+// 2.使用dto的方式：
+// @Data
+//public class AiTranslateRequest {
+//    private String content;
+//}
+//  public Result<String> aiTranslate(@RequestBody AiTranslateRequest request) {
+// 3.不使用dto，则使用map
+//  public Result<String> aiTranslate(@RequestBody Map<String, String> param) {
+//
+// 4.两种方式都可以：
+// @PostMapping(value = "/aiTranslate")
+//public Result<String> aiTranslate(@RequestParam(value = "content", required = false) String content,
+//                                  @RequestBody(required = false) Map<String, String> body) {
+//    String finalContent = content;
+//    if (finalContent == null && body != null) {
+//        finalContent = body.get("content");
+//    }
+//
+//    if (finalContent == null || finalContent.trim().isEmpty()) {
+//        return Result.fail("内容不能为空");
+//    }
+//
+//    // 处理逻辑
+//    return Result.ok(result);
+//}
+	public Result<String> aiTranslate(@RequestBody Map<String, String> param) {
 		try {
 			// Ollama服务地址
 			String ollamaUrl = "http://172.16.0.176:6868/api/generate";
-			
+			String content = param.get("content");
+
 			// 构造请求参数
 			JSONObject requestBody = new JSONObject();
 			requestBody.put("model", "qwen3:8b");
@@ -127,7 +155,8 @@ public class SsWeekReportController {
 					result = result.replaceAll("\n{3,}", "\n\n");
 					result = result.trim();
 				}
-				
+
+                log.info("AI转写结果：" + result);
 				return Result.OK(result);
 			} else {
 				return Result.error("AI转写服务调用失败");

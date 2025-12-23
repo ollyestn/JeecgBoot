@@ -94,8 +94,9 @@
                     // 调用后端AI转写接口
                     const result = await defHttp.post({
                         url: '/smartcity/ssWeekReport/aiTranslate',
-                        params: { content: workContent }
-                    }, { isTransformResponse: false });
+                        data: { content: workContent }
+                    }, { isTransformResponse: false,
+                     timeout: 180000});
                     
                     if (result.success) {
                         // 设置AI转写结果并打开对话框

@@ -10,9 +10,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.HashMap;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.jeecg.common.aspect.annotation.PermissionData;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -179,6 +181,7 @@ public class SsWeekReportController {
 	//@AutoLog(value = "周报-分页列表查询")
 	@Operation(summary="周报-分页列表查询")
 	@GetMapping(value = "/list")
+    @PermissionData(pageComponent="smartcity/SsWeekReport/SsWeekReportList")
 	public Result<IPage<SsWeekReport>> queryPageList(SsWeekReport ssWeekReport,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
@@ -401,5 +404,39 @@ public class SsWeekReportController {
       }
       return Result.OK("文件导入失败！");
     }
+
+  /**
+   * 提交周报，将状态设置为1
+   *
+   * @param id
+   * @return
+   */
+  @AutoLog(value = "周报-提交")
+  @Operation(summary="周报-提交")
+  @PostMapping(value = "/commit")
+  @RequiresPermissions("smartcity:ss_week_report:edit")
+//  public Result<String> commit(@RequestParam(name="id", required=true) String id) {
+  public Result<String> commit(@RequestBody(required = false) Map<String, String> body) {
+    String id = body.get("id");
+    if (StringUtils.isBlank(id)) {
+        return Result.error("参数错误！");
+    }
+
+    try {
+      SsWeekReport weekReport = ssWeekReportService.getById(id);
+      if (weekReport == null) {
+        return Result.error("未找到对应数据");
+      }
+      
+      // 设置状态为1（已提交）
+      weekReport.setStatus(1);
+      ssWeekReportService.updateById(weekReport);
+      
+      return Result.OK("提交成功");
+    } catch (Exception e) {
+      log.error("提交周报异常：", e);
+      return Result.error("提交失败：" + e.getMessage());
+    }
+  }
 
 }

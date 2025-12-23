@@ -43,7 +43,8 @@
   import {useModal} from '/@/components/Modal';
   import SsWeekReportModal from './components/SsWeekReportModal.vue'
   import {columns, searchFormSchema, superQuerySchema} from './SsWeekReport.data';
-  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl} from './SsWeekReport.api';
+  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl, commit} from './SsWeekReport.api';
+
   import {downloadFile} from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -75,7 +76,7 @@
                 ],
             },
            actionColumn: {
-               width: 120,
+               width: 180,
                fixed:'right'
            },
            beforeFetch: (params) => {
@@ -135,6 +136,23 @@
      });
    }
    /**
+    * 编辑事件
+    */
+  async function handleCommit(record: Recordable) {
+    try {
+      const result = await commit({ id: record.id });
+      if (result == "提交成功") { // result.success
+        //createMessage.success('提交成功');
+        reload(); // 重新加载表格数据
+      } else {
+        createMessage.error(result.message || '提交失败');
+      }
+    } catch (error) {
+      console.error('提交失败:', error);
+      createMessage.error('提交失败');
+    }
+   }
+   /**
     * 详情
    */
   function handleDetail(record: Recordable) {
@@ -163,15 +181,26 @@
       (selectedRowKeys.value = []) && reload();
    }
    /**
-      * 操作栏
-      */
+    * 操作栏
+    */
   function getTableAction(record){
+       const disabled = record.status==1;
        return [
          {
            label: '编辑',
            onClick: handleEdit.bind(null, record),
            auth: 'smartcity:ss_week_report:edit'
-         }
+         },
+         {
+            label: '提交',
+            disabled: disabled,
+            onClick: handleCommit.bind(null, record),
+            auth: 'smartcity:ss_week_report:commit'
+          },
+          {
+          label: '详情',
+          onClick: handleDetail.bind(null, record),
+         },
        ]
    }
 
@@ -181,10 +210,7 @@
    */
   function getDropDownAction(record){
     return [
-      {
-        label: '详情',
-        onClick: handleDetail.bind(null, record),
-      }, {
+       {
         label: '删除',
         popConfirm: {
           title: '是否确认删除',

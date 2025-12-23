@@ -22,3 +22,5 @@
  （这个ai做不到！）
 
 6、SsWeeklyRecordForm.vue调用handleAiTranslate()实现ai转录功能。请编写一个模态对话框，当调用成功返回后，显示该模态对话框，对话框为一个多行文本框，显示aitranslate接口的返回结果。一个应用按钮和一个取消按钮，点击应用按钮，将ai转写的结果赋予workContent, 点击取消，则不赋予，点击应用和取消都关闭该对话框。请实现该功能。
+
+7、SsWeekReportList.vue增加了提交按钮，点击按钮，function handleCommit(record: Recordable)，实现将当前记录的status值设置为1。请实现后端接口及前端调用。

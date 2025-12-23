@@ -15,6 +15,7 @@ enum Api {
   ssWeeklyRecordList = '/smartcity/ssWeekReport/querySsWeeklyRecordByMainId',
   ssWorklyPlanList = '/smartcity/ssWeekReport/querySsWorklyPlanByMainId',
   aiTranslate = '/smartcity/ssWeekReport/aiTranslate',
+  commit = '/smartcity/ssWeekReport/commit',
 }
 /**
  * 导出api
@@ -89,4 +90,12 @@ export const saveOrUpdate = (params, isUpdate) => {
  */
 export const aiTranslate = (params) => {
   return defHttp.post({url: Api.aiTranslate, params});
+}
+
+/**
+ * 提交接口
+ * @param params 
+ */
+export const commit = (params) => {
+  return defHttp.post({url: Api.commit, params});
 }

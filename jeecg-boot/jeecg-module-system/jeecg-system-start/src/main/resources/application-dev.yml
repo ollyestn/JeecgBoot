@@ -316,6 +316,9 @@ logging:
     org.flywaydb: debug
     org.jeecg.modules.system.mapper: info
     org.jeecg.modules.demo.test.mapper: info
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #swagger
 knife4j:
   #开启增强配置

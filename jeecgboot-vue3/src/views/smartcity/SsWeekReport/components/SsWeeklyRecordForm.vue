@@ -6,22 +6,14 @@
     </BasicForm>
     
     <!-- AI转写结果对话框 -->
-    <BasicModal
-      v-bind="$attrs"
-      @register="registerAiResultModal"
-      title="AI转写结果"
-      :width="600"
-      @ok="handleApplyAiResult"
+    <!--
+    <AiTranslateResultModal
+      @register="registerResultModal"
+      @apply="handleApplyAiResult"
       @cancel="handleCloseAiResult"
-    >
-     <!--
-      <a-textarea
-        v-model:value="aiResultContent"
-        :rows="10"
-        placeholder="AI转写结果将显示在这里"
-      />
-      -->
-    </BasicModal>
+      ref="aiResultModalRef"
+    />
+    -->
 </template>
 <script lang="ts">
     import {defineComponent, ref} from 'vue';
@@ -30,11 +22,12 @@
     import {defHttp} from '/@/utils/http/axios';
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils';
     import { useMessage } from '/@/hooks/web/useMessage';
-    import { BasicModal, useModal } from '/@/components/Modal';
+    import { useModal } from '/@/components/Modal';
+    import AiTranslateResultModal from './AiTranslateResultModal.vue';
 
     export default defineComponent({
         name:"SsWeeklyRecordForm",
-        components: {BasicForm},
+        components: {BasicForm, AiTranslateResultModal},
         emits:['register'],
         props:{
             disabled: {
@@ -45,15 +38,15 @@
         setup(props,{emit}) {
             const { createMessage } = useMessage();
             const aiLoading = ref(false);
-            const aiResultContent = ref('');
             const currentModel = ref({});
+            const aiResultModalRef = ref();
             const [registerForm, { setProps, resetFields, setFieldsValue, getFieldsValue, validate, scrollToField }] = useForm({
                 labelWidth: 150,
                 schemas: ssWeeklyRecordFormSchema,
                 showActionButtonGroup: false,
                 baseColProps: {span: 24}
             });
-            const [registerAiResultModal, { openModal: openAiResultModal, closeModal: closeAiResultModal }] = useModal();
+            const [registerResultModal, { openModal }] = useModal();
             /**
             *初始化加载数据
             */
@@ -100,8 +93,11 @@
                     
                     if (result.success) {
                         // 设置AI转写结果并打开对话框
-                        aiResultContent.value = result.result;
-                        openAiResultModal(true, {});
+                        //if (aiResultModalRef.value) {
+                        //    aiResultModalRef.value.setAiResultContent(result.result);
+                        //}
+                        //openModal(true, {});
+                        model.workContent = result.result;
                     } else {
                         createMessage.error(result.message || 'AI转写失败');
                     }
@@ -116,10 +112,9 @@
             /**
             * 应用AI转写结果
             */
-            function handleApplyAiResult() {
+            function handleApplyAiResult(content) {
                 // 将AI转写结果应用到工作内容记录字段
-                setFieldsValue({ workContent: aiResultContent.value });
-                closeAiResultModal();
+                setFieldsValue({ workContent: content });
                 createMessage.success('已应用AI转写结果');
             }
             
@@ -127,7 +122,7 @@
             * 关闭AI转写结果对话框
             */
             function handleCloseAiResult() {
-                closeAiResultModal();
+                // 对话框会在组件内部自动关闭，这里可以添加其他逻辑
             }
             
             /**
@@ -151,8 +146,8 @@
                 validateForm,
                 aiLoading,
                 handleAiTranslate,
-                registerAiResultModal,
-                aiResultContent,
+                registerResultModal,
+                aiResultModalRef,
                 handleApplyAiResult,
                 handleCloseAiResult
             }

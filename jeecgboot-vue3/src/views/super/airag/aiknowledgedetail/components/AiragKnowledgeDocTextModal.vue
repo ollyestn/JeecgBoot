@@ -14,8 +14,8 @@
 
   import BasicForm from '@/components/Form/src/BasicForm.vue';
   import { useForm } from '@/components/Form';
-  import { docTextSchema } from '../AiKnowledgeBase.data';
-  import { knowledgeSaveDoc, queryById } from '../AiKnowledgeBase.api';
+  import { docTextSchema } from '../AiKnowledgeBaseDetail.data';
+  import { knowledgeSaveDoc, queryById } from '../AiKnowledgeBaseDetail.api';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   export default {
@@ -30,8 +30,9 @@
 
       //保存或修改
       const isUpdate = ref<boolean>(false);
-      //知识库id
+      //知识库id+节点Id
       const knowledgeId = ref<string>();
+      const nodeId = ref<string>();
       //表单配置
       const [registerForm, { resetFields, setFieldsValue, validate, clearValidate, updateSchema }] = useForm({
         schemas: docTextSchema,
@@ -72,6 +73,7 @@
           let values = await validate();
           if (!unref(isUpdate)) {
             values.knowledgeId = knowledgeId.value;
+            values.nodeId = nodeId.value;
           }
           if(values.filePath){
             values.metadata = JSON.stringify({ filePath: values.filePath });

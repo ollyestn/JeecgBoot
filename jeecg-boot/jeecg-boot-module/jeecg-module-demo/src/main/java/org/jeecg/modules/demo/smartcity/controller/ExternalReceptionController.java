@@ -87,7 +87,7 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 		externalReceptionService.save(externalReception);
 
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待统计");
+        airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待,照片影像及汇报材料");
 
 		return Result.OK("添加成功！");
 	}
@@ -106,7 +106,7 @@ public class ExternalReceptionController extends JeecgController<ExternalRecepti
 		externalReceptionService.updateById(externalReception);
 
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待统计");
+        airagUtils.AddFiles(externalReception.getVisitFiles(), "客户接待,照片影像及汇报材料");
 
 		return Result.OK("编辑成功!");
 	}

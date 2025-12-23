@@ -1,7 +1,16 @@
-<!--手动录入text-->
 <template>
   <div class="p-2">
-    <BasicModal destroyOnClose @register="registerModal" width="600px" :title="title" @ok="handleOk" @cancel="handleCancel">
+    <BasicModal destroyOnClose @register="registerModal" :canFullscreen="false" width="600px" :title="title" @ok="handleOk" @cancel="handleCancel">
+      <template #title>
+         <span style="display: flex">
+          {{title}}
+          <a-tooltip title="AI知识库文档">
+            <a style="color: unset" href="https://help.jeecg.com/aigc/guide/knowledge" target="_blank">
+              <Icon style="position:relative;left:2px;top:1px" icon="ant-design:question-circle-outlined"></Icon>
+            </a>
+          </a-tooltip>
+        </span>
+      </template>
       <BasicForm @register="registerForm"></BasicForm>
     </BasicModal>
   </div>
@@ -14,12 +23,12 @@
 
   import BasicForm from '@/components/Form/src/BasicForm.vue';
   import { useForm } from '@/components/Form';
-  import { docTextSchema } from '../AiKnowledgeBase.data';
-  import { knowledgeSaveDoc, queryById } from '../AiKnowledgeBase.api';
+  import { formSchema } from '../AiKnowledgeBaseDetail.data';
+  import { saveKnowledge, editKnowledge, queryById } from '../AiKnowledgeBaseDetail.api';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   export default {
-    name: 'AiragKnowledgeDocModal',
+    name: 'KnowledgeBaseModal',
     components: {
       BasicForm,
       BasicModal,
@@ -30,11 +39,10 @@
 
       //保存或修改
       const isUpdate = ref<boolean>(false);
-      //知识库id
-      const knowledgeId = ref<string>();
+
       //表单配置
       const [registerForm, { resetFields, setFieldsValue, validate, clearValidate, updateSchema }] = useForm({
-        schemas: docTextSchema,
+        schemas: formSchema,
         showActionButtonGroup: false,
         layout: 'vertical',
         wrapperCol: { span: 24 },
@@ -46,21 +54,15 @@
         await resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
-        title.value = isUpdate.value ? '编辑文档' : '创建文档';
+        title.value = isUpdate.value ? '编辑知识库' : '创建知识库';
         if (unref(isUpdate)) {
-          if(data.record.type === 'file' && data.record.metadata){
-            data.record.filePath = JSON.parse(data.record.metadata).filePath;
-          }
+          let values = await queryById({ id: data.id });
           //表单赋值
           await setFieldsValue({
-            ...data.record,
+            ...values.result,
           });
-        } else {
-          knowledgeId.value = data.knowledgeId;
-          nodeId.value = data.nodeId;
-          await setFieldsValue({ type: data.type })
         }
-        setModalProps({ bodyStyle: { padding: '10px' } });
+        setModalProps({ minHeight: 500, bodyStyle: { padding: '10px' } });
       });
 
       /**
@@ -71,13 +73,10 @@
           setModalProps({ confirmLoading: true });
           let values = await validate();
           if (!unref(isUpdate)) {
-            values.knowledgeId = knowledgeId.value;
+            await saveKnowledge(values);
+          } else {
+            await editKnowledge(values);
           }
-          if(values.filePath){
-            values.metadata = JSON.stringify({ filePath: values.filePath });
-            delete values.filePath;
-          }
-          await knowledgeSaveDoc(values);
           //关闭弹窗
           closeModal();
           //刷新列表

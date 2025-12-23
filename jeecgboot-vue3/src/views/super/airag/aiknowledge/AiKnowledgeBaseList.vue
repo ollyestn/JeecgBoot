@@ -108,6 +108,7 @@
 
 <script lang="ts">
   import { reactive, ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import { useModal } from '/@/components/Modal';
   import { deleteModel, list, rebuild } from './AiKnowledgeBase.api';
   import { doDeleteAllDoc } from "./AiKnowledgeBase.api.util";
@@ -132,6 +133,7 @@
       Pagination,
     },
     setup() {
+      const router = useRouter();
       //模型列表
       const knowledgeList = ref([]);
 
@@ -199,7 +201,7 @@
           order: 'desc'
         };
         Object.assign(params, queryParam);
-      
+
         list(params).then((res) => {
           if (res.success) {
             knowledgeList.value = res.result.records;
@@ -267,7 +269,14 @@
        * @param id
        */
       function handleDocClick(id) {
-        openDocModal(true, { id });
+        // 跳转到知识库详情页面，传递knowledgeId参数
+        router.push({
+          //path: '/smartcity/airagKnowledgeTreeDetail',
+          path: '/super/airag/aiknowledgedetail/AiKnowledgeBaseDetail',
+          query: {
+            knowledgeId: id
+          }
+        });
       }
 
       /**
@@ -309,6 +318,7 @@
         handleDocClick,
         docListRegister,
         handleVectorization,
+        router
       };
     },
   };

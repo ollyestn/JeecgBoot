@@ -88,7 +88,7 @@ public class SalesTrainingController extends JeecgController<SalesTraining, ISal
 
         // 培训教案加入知识库
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(salesTraining.getFiles(), "培训统计");
+        airagUtils.AddFiles(salesTraining.getFiles(), "内训,培训教程");
 
 		return Result.OK("添加成功！");
 	}
@@ -108,7 +108,7 @@ public class SalesTrainingController extends JeecgController<SalesTraining, ISal
 
         // 培训教案加入知识库
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(salesTraining.getFiles(), "培训统计");
+        airagUtils.AddFiles(salesTraining.getFiles(), "内训,培训教程");
 
 		return Result.OK("编辑成功!");
 	}

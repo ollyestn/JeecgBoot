@@ -95,6 +95,7 @@ public class AiragKnowledgeDocServiceImpl extends ServiceImpl<AiragKnowledgeDocM
     public Result<?> editDocument(AiragKnowledgeDoc airagKnowledgeDoc) {
         AssertUtils.assertNotEmpty("文档不能未空", airagKnowledgeDoc);
         AssertUtils.assertNotEmpty("知识库不能未空", airagKnowledgeDoc.getKnowledgeId());
+        AssertUtils.assertNotEmpty("知识库目录不能未空", airagKnowledgeDoc.getNodeId());
         AssertUtils.assertNotEmpty("文档标题不能未空", airagKnowledgeDoc.getTitle());
         AssertUtils.assertNotEmpty("文档类型不能未空", airagKnowledgeDoc.getType());
         if (KNOWLEDGE_DOC_TYPE_TEXT.equals(airagKnowledgeDoc.getType())) {

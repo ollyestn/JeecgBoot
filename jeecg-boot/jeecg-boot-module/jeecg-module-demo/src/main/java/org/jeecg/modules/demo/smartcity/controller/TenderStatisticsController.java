@@ -103,7 +103,7 @@ public class TenderStatisticsController extends JeecgController<TenderStatistics
 
         // 投标复盘反馈
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(tenderStatistics.getFiles(), "投标统计");
+        airagUtils.AddFiles(tenderStatistics.getFiles(), "招投标,总结复盘");
 
 		return Result.OK("添加成功！");
 	}
@@ -123,7 +123,7 @@ public class TenderStatisticsController extends JeecgController<TenderStatistics
 
         // 投标复盘反馈
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(tenderStatistics.getFiles(), "投标统计");
+        airagUtils.AddFiles(tenderStatistics.getFiles(), "招投标,总结复盘");
 
 		return Result.OK("编辑成功!");
 	}

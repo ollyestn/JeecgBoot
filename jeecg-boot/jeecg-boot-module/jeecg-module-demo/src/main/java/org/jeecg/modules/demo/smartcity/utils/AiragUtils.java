@@ -37,8 +37,12 @@ public class AiragUtils {
         if (filePath==null || filePath.isEmpty())
             return false;
 
+        String[] knowledgeNames = knowledgeName.split(",");
+        if  (knowledgeNames.length==0)
+            return false;
+
         // 根据名称查询
-        AiragKnowledge airagKnowledge = getKnowledgeByName(knowledgeName);
+        AiragKnowledge airagKnowledge = getKnowledgeByName(knowledgeNames[0]);
         if (airagKnowledge==null){
             return false;
         }
@@ -128,18 +132,26 @@ public class AiragUtils {
 
     public AiragKnowledgeTree getKnowledgeTreeByName(String knowledgeName, String knowId){
         AiragKnowledgeTree airagKnowledgeTree = null;
-        // 查询
-        List<AiragKnowledgeTree> lsts = airagKnowledgeTreeService.list(new QueryWrapper<AiragKnowledgeTree>().eq("name", knowledgeName).eq("pid", "0"));
-        if (lsts.isEmpty()){
-            airagKnowledgeTree = new AiragKnowledgeTree();
-            airagKnowledgeTree.setKnowledgeId(knowId);
-            airagKnowledgeTree.setName(knowledgeName);
-            airagKnowledgeTree.setLevel(1);
-            airagKnowledgeTree.setPid("0");
-            airagKnowledgeTreeService.save(airagKnowledgeTree);
-        }
-        else {
-            airagKnowledgeTree = lsts.get(0);
+
+        String[] knowledgeNames = knowledgeName.split(",");
+        if  (knowledgeNames.length==0)
+            return null;
+
+        String pid = "0";
+        for (String kname : knowledgeNames) {
+            // 查询
+            List<AiragKnowledgeTree> lsts = airagKnowledgeTreeService.list(new QueryWrapper<AiragKnowledgeTree>().eq("name", kname).eq("pid", pid));
+            if (lsts.isEmpty()) {
+                airagKnowledgeTree = new AiragKnowledgeTree();
+                airagKnowledgeTree.setKnowledgeId(knowId);
+                airagKnowledgeTree.setName(knowledgeName);
+                airagKnowledgeTree.setLevel(1);
+                airagKnowledgeTree.setPid(pid);
+                airagKnowledgeTreeService.save(airagKnowledgeTree);
+            } else {
+                airagKnowledgeTree = lsts.get(0);
+            }
+            pid = airagKnowledgeTree.getId();
         }
 
         return airagKnowledgeTree;

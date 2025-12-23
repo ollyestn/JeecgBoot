@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * @Description: 周报
  * @Author: jeecg-boot
- * @Date:   2025-12-22
+ * @Date:   2025-12-23
  * @Version: V1.0
  */
 @Schema(description="周报")
@@ -47,6 +47,10 @@ public class SsWeekReport implements Serializable {
 	@Excel(name = "周", width = 15)
     @Schema(description = "周")
     private java.lang.Integer week;
+	/**提交状态(0草稿,1提交)*/
+	@Excel(name = "提交状态(0草稿,1提交)", width = 15)
+    @Schema(description = "提交状态(0草稿,1提交)")
+    private java.lang.Integer status;
 	/**创建人*/
     @Schema(description = "创建人")
     private java.lang.String createBy;

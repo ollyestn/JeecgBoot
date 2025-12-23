@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 投标统计
  * @Author: jeecg-boot
- * @Date:   2025-11-16
+ * @Date:   2025-12-23
  * @Version: V1.0
  */
 @Data
@@ -93,6 +93,14 @@ public class TenderStatistics implements Serializable {
 	@Excel(name = "未中标原因", width = 15)
     @Schema(description = "未中标原因")
     private java.lang.String reasonNotWinning;
+	/**招标文件*/
+	@Excel(name = "招标文件", width = 15)
+    @Schema(description = "招标文件")
+    private java.lang.String tenderFile;
+	/**投标文件*/
+	@Excel(name = "投标文件", width = 15)
+    @Schema(description = "投标文件")
+    private java.lang.String biddingFile;
 	/**投标复盘反馈*/
 	@Excel(name = "投标复盘反馈", width = 15)
     @Schema(description = "投标复盘反馈")

@@ -179,6 +179,30 @@ navigationBarTitleText: '投标统计',
         </view>
           <view class="{ 'mt-14px': 1 == 0 }">
              <wd-cell
+                :title="get4Label('招标文件')"
+                title-width="100px"
+             >
+
+            <online-file-custom
+            v-model:value="myFormData['tenderFile']"
+            name='tenderFile'
+            ></online-file-custom>
+            </wd-cell>
+        </view>
+          <view class="{ 'mt-14px': 0 == 0 }">
+             <wd-cell
+                :title="get4Label('投标文件')"
+                title-width="100px"
+             >
+
+            <online-file-custom
+            v-model:value="myFormData['biddingFile']"
+            name='biddingFile'
+            ></online-file-custom>
+            </wd-cell>
+        </view>
+          <view class="{ 'mt-14px': 1 == 0 }">
+             <wd-cell
                 :title="get4Label('投标复盘反馈')"
                 title-width="100px"
              >

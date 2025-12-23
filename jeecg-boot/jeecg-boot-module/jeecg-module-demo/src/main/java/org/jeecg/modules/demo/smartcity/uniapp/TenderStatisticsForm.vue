@@ -78,6 +78,18 @@
               </view>
               <view class="cu-form-group">
                 <view class="flex align-center">
+                  <view class="title"><text space="ensp">招标文件：</text></view>
+                  <input  placeholder="请输入招标文件" v-model="model.tenderFile"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
+                  <view class="title"><text space="ensp">投标文件：</text></view>
+                  <input  placeholder="请输入投标文件" v-model="model.biddingFile"/>
+                </view>
+              </view>
+              <view class="cu-form-group">
+                <view class="flex align-center">
                   <view class="title"><text space="ensp">投标复盘反馈：</text></view>
                   <input  placeholder="请输入投标复盘反馈" v-model="model.files"/>
                 </view>

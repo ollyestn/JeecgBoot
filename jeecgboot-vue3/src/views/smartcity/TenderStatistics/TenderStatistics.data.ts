@@ -79,6 +79,16 @@ export const columns: BasicColumn[] = [
     dataIndex: 'reasonNotWinning'
    },
    {
+    title: '招标文件',
+    align:"center",
+    dataIndex: 'tenderFile',
+   },
+   {
+    title: '投标文件',
+    align:"center",
+    dataIndex: 'biddingFile',
+   },
+   {
     title: '投标复盘反馈',
     align:"center",
     dataIndex: 'files',
@@ -212,6 +222,20 @@ export const formSchema: FormSchema[] = [
     component: 'Input',
   },
   {
+    label: '招标文件',
+    field: 'tenderFile',
+    component: 'JUpload',
+    componentProps:{
+     },
+  },
+  {
+    label: '投标文件',
+    field: 'biddingFile',
+    component: 'JUpload',
+    componentProps:{
+     },
+  },
+  {
     label: '投标复盘反馈',
     field: 'files',
     component: 'JUpload',
@@ -242,7 +266,9 @@ export const superQuerySchema = {
   biddingSituation: {title: '中标情况',order: 10,view: 'text', type: 'string',},
   winBidAmount: {title: '中标金额',order: 11,view: 'text', type: 'string',},
   reasonNotWinning: {title: '未中标原因',order: 12,view: 'text', type: 'string',},
-  files: {title: '投标复盘反馈',order: 13,view: 'file', type: 'string',},
+  tenderFile: {title: '招标文件',order: 13,view: 'file', type: 'string',},
+  biddingFile: {title: '投标文件',order: 14,view: 'file', type: 'string',},
+  files: {title: '投标复盘反馈',order: 15,view: 'file', type: 'string',},
 };
 
 /**

@@ -67,6 +67,16 @@ export const columns = [
     dataIndex: 'reasonNotWinning'
    },
    {
+    title: '招标文件',
+    align:"center",
+    dataIndex: 'tenderFile',
+   },
+   {
+    title: '投标文件',
+    align:"center",
+    dataIndex: 'biddingFile',
+   },
+   {
     title: '投标复盘反馈',
     align:"center",
     dataIndex: 'files',

@@ -76,7 +76,7 @@
                 ],
             },
            actionColumn: {
-               width: 180,
+               width: 240,
                fixed:'right'
            },
            beforeFetch: (params) => {
@@ -201,6 +201,15 @@
           label: '详情',
           onClick: handleDetail.bind(null, record),
          },
+         {
+           label: '删除',
+           popConfirm: {
+             title: '是否确认删除',
+             confirm: handleDelete.bind(null, record),
+             placement: 'topLeft'
+           },
+           auth: 'smartcity:ss_week_report:delete'
+         }
        ]
    }
 
@@ -210,15 +219,7 @@
    */
   function getDropDownAction(record){
     return [
-       {
-        label: '删除',
-        popConfirm: {
-          title: '是否确认删除',
-          confirm: handleDelete.bind(null, record),
-          placement: 'topLeft'
-        },
-        auth: 'smartcity:ss_week_report:delete'
-      }
+
     ]
   }
 

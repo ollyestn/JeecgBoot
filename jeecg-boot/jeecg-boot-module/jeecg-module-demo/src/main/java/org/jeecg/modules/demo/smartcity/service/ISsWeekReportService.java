@@ -1,5 +1,8 @@
 package org.jeecg.modules.demo.smartcity.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.demo.smartcity.entity.SsWeeklySummary;
 import org.jeecg.modules.demo.smartcity.entity.SsWeeklyRecord;
 import org.jeecg.modules.demo.smartcity.entity.SsWorklyPlan;
@@ -17,7 +20,11 @@ import java.util.List;
  */
 public interface ISsWeekReportService extends IService<SsWeekReport> {
 
-	/**
+    IPage<SsWeekReport> page(Page<SsWeekReport> page, QueryWrapper<SsWeekReport> queryWrapper);
+
+    List<SsWeekReport> list(QueryWrapper<SsWeekReport> queryWrapper);
+
+    /**
 	 * 添加一对多
 	 *
 	 * @param ssWeekReport

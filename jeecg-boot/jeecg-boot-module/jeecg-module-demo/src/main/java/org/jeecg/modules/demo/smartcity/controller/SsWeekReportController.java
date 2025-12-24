@@ -181,7 +181,7 @@ public class SsWeekReportController {
 	//@AutoLog(value = "周报-分页列表查询")
 	@Operation(summary="周报-分页列表查询")
 	@GetMapping(value = "/list")
-    @PermissionData(pageComponent="smartcity/SsWeekReport/SsWeekReportList")
+    //@PermissionData(pageComponent="smartcity/SsWeekReport/SsWeekReportList")
 	public Result<IPage<SsWeekReport>> queryPageList(SsWeekReport ssWeekReport,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,

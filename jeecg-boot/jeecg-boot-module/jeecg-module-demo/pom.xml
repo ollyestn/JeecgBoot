@@ -22,6 +22,10 @@
             <version>3.9.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jeecgframework.boot3</groupId>
+            <artifactId>jeecg-system-biz</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

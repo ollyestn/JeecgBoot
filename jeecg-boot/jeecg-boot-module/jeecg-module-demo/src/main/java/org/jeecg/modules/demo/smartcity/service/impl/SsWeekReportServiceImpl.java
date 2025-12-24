@@ -46,70 +46,9 @@ public class SsWeekReportServiceImpl extends ServiceImpl<SsWeekReportMapper, SsW
     private CustomDataPermissionHandler dataPermissionHandler;
 
     @Override
-//    public IPage<SsWeekReport> page(Page<SsWeekReport> page, QueryWrapper<SsWeekReport> queryWrapper) {
-//        // 合并数据权限条件
-//        QueryWrapper<SsWeekReport> permissionWrapper = dataPermissionHandler.getDataPermissionWrapper(SsWeekReport.class);
-//
-//        // 正确的方式1：使用and方法合并两个Wrapper的条件
-////        if (queryWrapper != null && StringUtils.isNotBlank(queryWrapper.getCustomSqlSegment())) {
-////            // 将原有queryWrapper的条件作为子条件，与权限条件进行AND
-////            permissionWrapper.and(wq -> {
-////                // 这里直接将queryWrapper的条件复制过来
-////                applyQueryWrapperConditions(wq, queryWrapper);
-////            });
-////        }
-//
-//        // 正确的方式3：手动合并条件（最安全的方式）
-//        if (queryWrapper != null) {
-//            // 获取queryWrapper中的所有条件
-//            Map<String, Object> originalParams = getOriginalQueryParams(queryWrapper);
-//
-//            // 将原始条件逐个添加到权限Wrapper中
-//            applyOriginalConditions(permissionWrapper, originalParams, queryWrapper);
-//        }
-//
-//        // 处理排序
-//        if (queryWrapper != null && queryWrapper.getOrderBySegments() != null) {
-//            List<String> orderBySegments = queryWrapper.getOrderBySegments();
-//            if (!orderBySegments.isEmpty()) {
-//                permissionWrapper.orderBy(true, true, orderBySegments.toArray(new String[0]));
-//            }
-//        }
-//
-//        return super.page(page, permissionWrapper);
-//    }
-
     public IPage<SsWeekReport> page(Page<SsWeekReport> page, QueryWrapper<SsWeekReport> queryWrapper) {
-        // 方式1：直接构建新的Wrapper，分别添加条件
-        QueryWrapper<SsWeekReport> finalWrapper = new QueryWrapper<>();
-
         // 先添加数据权限条件
         addDataPermissionConditions(queryWrapper);
-
-        // 再添加用户查询条件（如果有）
-//        if (queryWrapper != null && StringUtils.isNotBlank(queryWrapper.getCustomSqlSegment())) {
-//            // 使用and()方法添加用户条件
-//            finalWrapper.and(wq -> {
-//                // 获取用户条件的SQL片段
-//                String userSqlSegment = queryWrapper.getCustomSqlSegment();
-//                Map<String, Object> userParams = queryWrapper.getParamNameValuePairs();
-//
-//                if (userParams != null && !userParams.isEmpty()) {
-//                    // 正确的apply用法：传递SQL片段和参数数组
-//                    wq.apply(userSqlSegment, userParams.values().toArray());
-//                } else {
-//                    wq.apply(userSqlSegment);
-//                }
-//            });
-//        }
-        
-        // 复制排序条件
-//        if (queryWrapper != null && queryWrapper.getOrderBySegments() != null) {
-//            List<String> orders = queryWrapper.getOrderBySegments();
-//            for (String order : orders) {
-//                finalWrapper.orderBy(true, true, order);
-//            }
-//        }
 
         return super.page(page, queryWrapper);
     }
@@ -125,17 +64,6 @@ public class SsWeekReportServiceImpl extends ServiceImpl<SsWeekReportMapper, SsW
     /**
      * 将源wrapper的条件复制到目标wrapper
      */
-//    private void applyQueryWrapperConditions(QueryWrapper<SsWeekReport> target, QueryWrapper<SsWeekReport> source) {
-//        // 获取源wrapper的SQL片段和参数
-//        String sqlSegment = source.getCustomSqlSegment();
-//        Map<String, Object> paramMap = source.getParamNameValuePairs();
-//
-//        if (StringUtils.isNotBlank(sqlSegment) && paramMap != null && !paramMap.isEmpty()) {
-//            // 使用apply方法，同时传递参数
-//            target.apply(sqlSegment, paramMap.values().toArray());
-//        }
-//    }
-
     private void addDataPermissionConditions(QueryWrapper<SsWeekReport> wrapper) {
         // 获取当前登录用户
         LoginUser currentUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -150,7 +78,8 @@ public class SsWeekReportServiceImpl extends ServiceImpl<SsWeekReportMapper, SsW
                     .or()
                     .eq("create_by", username)
             );
-        } else {
+        }
+        else {
             wrapper.eq("create_by", username);
         }
     }

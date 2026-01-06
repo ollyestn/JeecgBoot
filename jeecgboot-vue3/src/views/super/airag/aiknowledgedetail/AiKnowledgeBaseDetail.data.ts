@@ -107,12 +107,28 @@ export const docTextSchema: FormSchema[] = [
     field: 'filePath',
     rules: [{ required: true, message: '请上传文件' }],
     component: 'JUpload',
-    helpMessage:'支持txt、markdown、pdf、docx、xlsx、pptx',
+    helpMessage:'支持txt、markdown、pdf、docx、xlsx、pptx222',
     componentProps:{
       fileType: 'file',
       maxCount: 1,
       multiple: false,
-      text: '上传文档'
+      text: '上传文档',
+      onChange: (info) => {
+        // 提取文件名（不包含后缀）
+        const fileName = info.replace(/\.[^/.]+$/, "").split('/').pop();
+        // 自动填写到标题字段
+        //setFieldsValue({ "title": fileName });
+
+        // 通过 emit 通知父组件更新标题
+        // 需要在父组件中处理这个事件
+        //emit('fileUploaded', fileName);
+
+        // 通过 window 事件触发文件上传完成
+        const event = new CustomEvent('fileUploadCompleted', {
+          detail: { fileName }
+        });
+        window.dispatchEvent(event);
+      }
     },
     ifShow:({ values })=>{
       if(values.type === 'file'){

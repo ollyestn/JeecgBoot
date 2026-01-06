@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-  import { ref, unref } from 'vue';
+  import { ref, unref, onMounted, onUnmounted } from 'vue';
   import BasicModal from '@/components/Modal/src/BasicModal.vue';
   import { useModal, useModalInner } from '@/components/Modal';
 
@@ -39,6 +39,23 @@
         showActionButtonGroup: false,
         layout: 'vertical',
         wrapperCol: { span: 24 },
+      });
+
+      // 文件上传完成事件处理
+      const handleFileUploadCompleted = (event: CustomEvent) => {
+        debugger;
+        const { fileName } = event.detail;
+        setFieldsValue({ title: fileName });
+      };
+
+      // 注册事件监听器
+      onMounted(() => {
+        window.addEventListener('fileUploadCompleted', handleFileUploadCompleted);
+      });
+
+      // 移除事件监听器
+      onUnmounted(() => {
+        window.removeEventListener('fileUploadCompleted', handleFileUploadCompleted);
       });
 
       //注册modal

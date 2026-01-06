@@ -644,6 +644,7 @@
             createMessage.warning('请上传zip文件');
             return false;
         }
+        console.log("上传前事件:777777");
         uploadLoading.value = true;
         return true;
       }
@@ -654,6 +655,7 @@
        */
       function handleUploadChange(info) {
         let { file } = info;
+        console.log("上传前事件:777777:"+info);
         if (file.status === 'error' || (file.response && file.response.code == 500)) {
           createMessage.error(file.response?.message ||`${file.name} 上传失败,请查看服务端日志`);
           uploadLoading.value = false;

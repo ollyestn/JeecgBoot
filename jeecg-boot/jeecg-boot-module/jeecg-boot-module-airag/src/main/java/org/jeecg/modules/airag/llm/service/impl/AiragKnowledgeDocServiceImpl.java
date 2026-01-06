@@ -44,6 +44,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.jeecg.modules.airag.llm.consts.LLMConsts.*;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 
 /**
  * @Description: airag知识库文档
@@ -131,6 +132,10 @@ public class AiragKnowledgeDocServiceImpl extends ServiceImpl<AiragKnowledgeDocM
         // 查询数据
         List<AiragKnowledgeDoc> docList = airagKnowledgeDocMapper.selectBatchIds(docIdList);
         AssertUtils.assertNotEmpty("文档不存在", docList);
+
+        // 设置最小膨胀比率为 0（禁用限制）
+        ZipSecureFile.setMinInflateRatio(0);
+        ZipSecureFile.setMaxFileCount(10000);
 
         HttpServletRequest request = SpringContextUtils.getHttpServletRequest();
         // 检查状态

@@ -125,7 +125,7 @@ public class SsWeekReportController {
 			// 构造请求参数
 			JSONObject requestBody = new JSONObject();
 			requestBody.put("model", "qwen3:8b");
-			requestBody.put("prompt", "请将以下工作内容转换为格式化的周报内容，每件事一行，格式如：1）星期一，12月1日，拜访内蒙古医院姚主任。\n\n" + content);
+			requestBody.put("prompt", "请将以下工作内容转换为格式化的周报内容，每件事一行，并且按时间的先后顺序排序，格式如：1）星期一，12月1日，拜访内蒙古医院姚主任。\n\n" + content);
 			requestBody.put("stream", false);
 			
 			// 发送请求到Ollama

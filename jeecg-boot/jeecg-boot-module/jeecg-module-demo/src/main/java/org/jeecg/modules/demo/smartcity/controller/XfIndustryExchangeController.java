@@ -107,7 +107,7 @@ public class XfIndustryExchangeController extends JeecgController<XfIndustryExch
 
         // 同业交流统计
         AiragUtils airagUtils = new AiragUtils(airagKnowledgeDocService, airagKnowledgeService, airagKnowledgeTreeService);
-        airagUtils.AddFiles(xfIndustryExchange.getFiles(), "同业交流统计");
+        airagUtils.AddFiles(xfIndustryExchange.getFiles(), "同业交流,照片影像及交流材料");
 
 		return Result.OK("编辑成功!");
 	}
